@@ -1,8 +1,17 @@
-export default function SettingsPage() {
+﻿import { PageHeader } from "@/components/PageHeader";
+import { PlaceholderPanel } from "@/components/PlaceholderPanel";
+
+export default function Page() {
   return (
-    <section>
-      <h1>Settings</h1>
-      <p>NOT CONNECTED — placeholder route only.</p>
-    </section>
+    <>
+      <PageHeader
+        title="Settings"
+        description="Store identity, connection status, and environment configuration."
+      />
+      <PlaceholderPanel
+        title="Settings workspace"
+        body="Only non-sensitive STORE_SLUG identity is configured. Secrets stay in environment variables."
+      />
+    </>
   );
 }

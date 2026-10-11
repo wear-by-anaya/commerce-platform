@@ -1,0 +1,57 @@
+.wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tip {
+  position: absolute;
+  z-index: 40;
+  max-width: 14rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.35rem;
+  background: #111111;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  white-space: normal;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0.15rem);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.top .tip {
+  bottom: calc(100% + 0.4rem);
+  left: 50%;
+  transform: translate(-50%, 0.15rem);
+}
+
+.right .tip {
+  left: calc(100% + 0.45rem);
+  top: 50%;
+  transform: translate(0.15rem, -50%);
+}
+
+.wrap:hover .tip,
+.wrap:focus-within .tip {
+  opacity: 1;
+}
+
+.top:hover .tip,
+.top:focus-within .tip {
+  transform: translate(-50%, 0);
+}
+
+.right:hover .tip,
+.right:focus-within .tip {
+  transform: translate(0, -50%);
+}
+
+@media (hover: none) {
+  .tip {
+    display: none;
+  }
+}

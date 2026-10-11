@@ -1,0 +1,89 @@
+.viewport {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: min(22rem, calc(100vw - 2rem));
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.9rem 0.95rem;
+  border: 1px solid var(--sg-warm-grey);
+  border-radius: 0.9rem;
+  background: var(--sg-white);
+  color: var(--sg-charcoal);
+  box-shadow: 0 12px 30px rgba(50, 45, 41, 0.12);
+  pointer-events: auto;
+  animation: slide-in 0.18s ease;
+}
+
+.info {
+  border-left: 3px solid var(--sg-burgundy);
+}
+
+.success {
+  border-left: 3px solid #2f6f4e;
+}
+
+.warning {
+  border-left: 3px solid #e2b657;
+}
+
+.error {
+  border-left: 3px solid #8b2e2e;
+}
+
+.copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.description {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: var(--sg-taupe);
+  line-height: 1.4;
+}
+
+.close {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.1rem 0.25rem;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 720px) {
+  .viewport {
+    right: 0.75rem;
+    left: 0.75rem;
+    bottom: 0.75rem;
+    width: auto;
+  }
+}

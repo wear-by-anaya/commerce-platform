@@ -1,8 +1,17 @@
-export default function InventoryPage() {
+﻿import { PageHeader } from "@/components/PageHeader";
+import { PlaceholderPanel } from "@/components/PlaceholderPanel";
+
+export default function Page() {
   return (
-    <section>
-      <h1>Inventory</h1>
-      <p>NOT CONNECTED — placeholder route only.</p>
-    </section>
+    <>
+      <PageHeader
+        title="Inventory"
+        description="Track inventory observations and quantity changes after sync integration."
+      />
+      <PlaceholderPanel
+        title="Inventory workspace"
+        body="Inventory observations and Shopify-safe mutations are not connected here yet."
+      />
+    </>
   );
 }

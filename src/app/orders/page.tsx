@@ -1,8 +1,17 @@
-export default function OrdersPage() {
+﻿import { PageHeader } from "@/components/PageHeader";
+import { PlaceholderPanel } from "@/components/PlaceholderPanel";
+
+export default function Page() {
   return (
-    <section>
-      <h1>Orders</h1>
-      <p>NOT CONNECTED — placeholder route only.</p>
-    </section>
+    <>
+      <PageHeader
+        title="Orders"
+        description="Monitor and triage storefront orders once Shopify is connected."
+      />
+      <PlaceholderPanel
+        title="Orders workspace"
+        body="No order feed, customer data, or revenue totals are loaded in this boilerplate."
+      />
+    </>
   );
 }

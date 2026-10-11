@@ -1,8 +1,17 @@
-export default function SyncRunsPage() {
+﻿import { PageHeader } from "@/components/PageHeader";
+import { PlaceholderPanel } from "@/components/PlaceholderPanel";
+
+export default function Page() {
   return (
-    <section>
-      <h1>Sync Runs</h1>
-      <p>NOT CONNECTED — placeholder route only.</p>
-    </section>
+    <>
+      <PageHeader
+        title="Sync Runs"
+        description="Inspect stock sync history, checkpoints, and run outcomes."
+      />
+      <PlaceholderPanel
+        title="Sync runs workspace"
+        body="No sync worker, cron, or run history is started from this repository."
+      />
+    </>
   );
 }

@@ -1,0 +1,46 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.copy {
+  min-width: min(100%, 36rem);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-sans-family);
+  font-size: clamp(1.75rem, 3vw, 2.35rem);
+  font-weight: 700;
+  color: var(--sg-deep-plum);
+}
+
+.info {
+  display: inline-flex;
+  color: var(--sg-taupe);
+  cursor: help;
+}
+
+.description {
+  margin: 0.45rem 0 0;
+  max-width: 40rem;
+  color: var(--sg-taupe);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}

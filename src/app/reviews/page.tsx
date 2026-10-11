@@ -1,8 +1,17 @@
-export default function ReviewsPage() {
+﻿import { PageHeader } from "@/components/PageHeader";
+import { PlaceholderPanel } from "@/components/PlaceholderPanel";
+
+export default function Page() {
   return (
-    <section>
-      <h1>Reviews</h1>
-      <p>NOT CONNECTED — placeholder route only.</p>
-    </section>
+    <>
+      <PageHeader
+        title="Reviews"
+        description="Queue operational reviews and exception handling."
+      />
+      <PlaceholderPanel
+        title="Reviews workspace"
+        body="Review queues and alerts are placeholder-only until backend services exist."
+      />
+    </>
   );
 }
