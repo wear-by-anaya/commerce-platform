@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import { Icon } from "@/components/icons";
 import { Badge } from "@/components/ui/Badge";
-import { Tooltip } from "@/components/ui/Tooltip";
 import { STORE_BRAND } from "@/lib/config";
 import { NAV_ITEMS } from "@/lib/nav";
 import styles from "./AppShell.module.css";
@@ -49,9 +48,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <p className={styles.brandName}>{STORE_BRAND}</p>
           <p className={styles.brandSub}>Operations</p>
         </div>
-        <Tooltip content="Integrations are not connected yet">
-          <span className={styles.statusChip}>NOT CONNECTED</span>
-        </Tooltip>
+        <span className={styles.statusChip}>NOT CONNECTED</span>
       </header>
 
       {open ? (
@@ -81,6 +78,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <nav className={styles.nav} aria-label="Primary">
           {NAV_ITEMS.map((item) => {
             const active = isActive(item.href);
+            const showBadge =
+              typeof item.badgeCount === "number" && item.badgeCount > 0;
             return (
               <Link
                 key={item.href}
@@ -93,12 +92,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <Icon name={item.icon} />
                 </span>
                 <span className={styles.navLabel}>{item.label}</span>
-                {item.badge ? (
-                  <Tooltip content={item.badge.tooltip} side="right">
-                    <span className={styles.navBadge}>
-                      <Badge tone={item.badge.tone}>{item.badge.label}</Badge>
-                    </span>
-                  </Tooltip>
+                {showBadge ? (
+                  <span className={styles.navBadge}>
+                    <Badge tone={item.badgeTone ?? "neutral"}>
+                      {item.badgeCount}
+                    </Badge>
+                  </span>
                 ) : null}
               </Link>
             );
@@ -106,24 +105,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </nav>
 
         <div className={styles.sidebarFooter}>
-          <Tooltip content="Shopify, database, and auth are not wired in this boilerplate">
-            <div className={styles.connectionCard}>
-              <span className={styles.connectionDot} aria-hidden="true" />
-              <div>
-                <p className={styles.connectionTitle}>System status</p>
-                <p className={styles.connectionText}>NOT CONNECTED</p>
-              </div>
+          <div className={styles.connectionCard}>
+            <span className={styles.connectionDot} aria-hidden="true" />
+            <div>
+              <p className={styles.connectionTitle}>System status</p>
+              <p className={styles.connectionText}>NOT CONNECTED</p>
             </div>
-          </Tooltip>
+          </div>
         </div>
       </aside>
 
       <div className={styles.content}>
         <div className={styles.desktopTop}>
           <p className={styles.desktopEyebrow}>Internal operations</p>
-          <Tooltip content="Live data appears after Shopify and workers are connected">
-            <span className={styles.statusChip}>NOT CONNECTED</span>
-          </Tooltip>
+          <span className={styles.statusChip}>NOT CONNECTED</span>
         </div>
         <main className={styles.main}>{children}</main>
       </div>

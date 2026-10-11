@@ -4,5 +4,4 @@ export interface OpsMetricCard {
   label: string;
   value: string;
   status: ConnectionStatus;
-  tooltip?: string;
 }
