@@ -1,11 +1,38 @@
-html, body {
+:root {
+  --sg-burgundy: #72383d;
+  --sg-burgundy-hover: #8a444b;
+  --sg-deep-plum: #4a2327;
+  --sg-charcoal: #322d29;
+  --sg-white: #ffffff;
+  --sg-ivory: #f5f0ea;
+  --sg-cream: #efe9e1;
+  --sg-warm-grey: #d1c7bd;
+  --sg-taupe: #6b5f56;
+  --font-sans-family: var(--font-sans), "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+html,
+body {
   max-width: 100vw;
   margin: 0;
   padding: 0;
-  background: #f6f3ee;
-  color: #1c1917;
-  font-family: Georgia, "Times New Roman", serif;
+  background: var(--sg-ivory);
+  color: var(--sg-charcoal);
+  font-family: var(--font-sans-family);
 }
 
-* { box-sizing: border-box; }
-a { color: inherit; }
+h1,
+h2,
+h3,
+.brand-heading {
+  font-family: var(--font-sans-family);
+  font-weight: 600;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+}

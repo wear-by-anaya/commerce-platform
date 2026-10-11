@@ -2,13 +2,13 @@
   min-height: 100vh;
   display: grid;
   grid-template-columns: 240px 1fr;
-  background: #f6f3ee;
-  color: #1c1917;
+  background: var(--sg-ivory);
+  color: var(--sg-charcoal);
 }
 
 .sidebar {
-  background: #1c1917;
-  color: #f5f5f4;
+  background: var(--sg-deep-plum);
+  color: var(--sg-white);
   padding: 1.5rem 1rem;
   display: flex;
   flex-direction: column;
@@ -17,15 +17,18 @@
 
 .brandName {
   margin: 0;
-  font-size: 1.15rem;
-  font-weight: 650;
-  letter-spacing: 0.01em;
+  font-family: var(--font-sans-family);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .brandSub {
-  margin: 0.25rem 0 0;
+  margin: 0.35rem 0 0;
+  font-family: var(--font-sans-family);
   font-size: 0.85rem;
-  opacity: 0.75;
+  font-weight: 500;
+  color: var(--sg-warm-grey);
 }
 
 .nav {
@@ -35,15 +38,19 @@
 }
 
 .navLink {
-  color: #e7e5e4;
+  color: var(--sg-white);
   text-decoration: none;
-  padding: 0.55rem 0.75rem;
-  border-radius: 0.4rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 0.75rem;
+  font-family: var(--font-sans-family);
   font-size: 0.95rem;
+  font-weight: 500;
 }
 
-.navLink:hover {
-  background: rgba(255, 255, 255, 0.08);
+.navLink:hover,
+.navLink:focus-visible {
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
 }
 
 .main {
@@ -54,6 +61,7 @@
   .shell {
     grid-template-columns: 1fr;
   }
+
   .nav {
     flex-direction: row;
     flex-wrap: wrap;

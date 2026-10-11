@@ -1,26 +1,32 @@
 .card {
-  background: #fffdf9;
-  border: 1px solid #e7e0d6;
-  border-radius: 0.75rem;
+  background: var(--sg-white);
+  border: 1px solid var(--sg-warm-grey);
+  border-radius: 0.9rem;
   padding: 1.25rem;
   min-height: 8rem;
 }
 
 .label {
   margin: 0;
-  font-size: 0.95rem;
+  font-family: var(--font-sans-family);
+  font-size: 0.9rem;
   font-weight: 600;
+  color: var(--sg-taupe);
 }
 
 .value {
   margin: 0.85rem 0 0.5rem;
-  font-size: 1.5rem;
-  font-weight: 650;
+  font-family: var(--font-sans-family);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--sg-charcoal);
 }
 
 .status {
   margin: 0;
+  font-family: var(--font-sans-family);
   font-size: 0.8rem;
+  font-weight: 600;
   letter-spacing: 0.04em;
-  color: #78716c;
+  color: var(--sg-burgundy);
 }
