@@ -76,6 +76,16 @@
 
 .menuClose {
   display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 0;
+  border-radius: 0.65rem;
+  background: var(--accent-soft);
+  color: var(--accent);
+  cursor: pointer;
+  flex: 0 0 auto;
 }
 
 .nav {
@@ -235,13 +245,14 @@
   .topMobile {
     position: sticky;
     top: 0;
-    z-index: 120;
+    z-index: 100;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
-    min-height: 3.25rem;
-    padding: 0.55rem 0.85rem;
+    height: 3.5rem; /* 56px standard mobile app bar */
+    min-height: 3.5rem;
+    padding: 0 0.85rem;
     background: var(--surface);
     border-bottom: 1px solid var(--line);
   }
@@ -257,22 +268,25 @@
     height: 100dvh;
     max-height: 100dvh;
     border-right: 0;
-    transform: translateX(100%);
-    transition: transform 0.35s var(--ease);
-    z-index: 110;
     background: var(--surface);
+    z-index: 200; /* overlays mobile header */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: none;
+    transition:
+      opacity 0.28s var(--ease),
+      visibility 0.28s var(--ease);
   }
 
   .open .sidebar {
-    transform: translateX(0);
-  }
-
-  .open .topMobile {
-    z-index: 130;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
   }
 
   .menuClose {
-    display: none;
+    display: inline-flex;
   }
 
   .main {

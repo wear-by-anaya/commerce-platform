@@ -51,16 +51,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <button
           type="button"
           className={styles.menuBtn}
-          aria-label={open ? "Close menu" : "Open menu"}
+          aria-label="Open menu"
           aria-expanded={open}
           aria-controls={panelId}
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => setOpen(true)}
         >
-          <Icon name={open ? "close" : "menu"} />
+          <Icon name="menu" />
         </button>
       </header>
 
-      <aside id={panelId} className={styles.sidebar}>
+      <aside
+        id={panelId}
+        className={styles.sidebar}
+        aria-hidden={!open}
+        aria-label="Navigation menu"
+      >
         <div className={styles.brand}>
           <div className={styles.brandRow}>
             {BRAND_LOGO.show ? (
