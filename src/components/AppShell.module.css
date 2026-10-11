@@ -78,12 +78,12 @@
   display: none;
   align-items: center;
   justify-content: center;
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
   border: 0;
-  border-radius: 0.65rem;
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: transparent;
+  color: var(--ink);
   cursor: pointer;
   flex: 0 0 auto;
 }
@@ -210,11 +210,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
   border: 0;
-  border-radius: 0.65rem;
-  background: var(--accent-soft);
+  background: transparent;
   color: var(--accent);
   cursor: pointer;
   flex: 0 0 auto;

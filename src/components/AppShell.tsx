@@ -56,7 +56,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           aria-controls={panelId}
           onClick={() => setOpen(true)}
         >
-          <Icon name="menu" />
+          <Icon name="menu" size={28} />
         </button>
       </header>
 
@@ -105,7 +105,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             aria-label="Close menu"
             onClick={() => setOpen(false)}
           >
-            <Icon name="close" />
+            <Icon name="close" size={28} />
           </button>
         </div>
         {BRAND_LOGO.show ? (
