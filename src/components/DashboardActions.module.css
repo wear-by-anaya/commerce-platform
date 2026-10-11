@@ -1,18 +1,26 @@
 .row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.65rem;
 }
 
 .primary,
 .secondary {
-  min-height: 2.5rem;
-  padding: 0.65rem 1.1rem;
-  border-radius: 999px;
+  min-height: 2.75rem;
+  padding: var(--button-padding);
+  border-radius: var(--button-radius);
   font-family: var(--font-sans-family);
-  font-size: 0.88rem;
-  font-weight: 600;
+  font-size: var(--text-button);
+  font-weight: var(--weight-button);
+  letter-spacing: normal;
+  text-transform: none;
+  line-height: 1.3;
   cursor: pointer;
+  transition:
+    background-color 0.3s var(--anaya-ease),
+    color 0.3s var(--anaya-ease),
+    border-color 0.3s var(--anaya-ease),
+    transform 0.3s var(--anaya-ease);
 }
 
 .primary {
@@ -30,11 +38,21 @@
 .primary:hover {
   background: var(--sg-burgundy-hover);
   border-color: var(--sg-burgundy-hover);
+  color: var(--sg-white);
 }
 
-.secondary:hover,
+.secondary:hover {
+  background: var(--sg-burgundy);
+  color: var(--sg-white);
+}
+
+.primary:active,
+.secondary:active {
+  transform: translateY(1px);
+}
+
 .primary:focus-visible,
 .secondary:focus-visible {
   outline: 2px solid var(--sg-burgundy);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }

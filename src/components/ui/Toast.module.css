@@ -21,7 +21,7 @@
   color: var(--sg-charcoal);
   box-shadow: 0 12px 30px rgba(50, 45, 41, 0.12);
   pointer-events: auto;
-  animation: slide-in 0.18s ease;
+  animation: slide-in 0.3s var(--anaya-ease);
 }
 
 .info {

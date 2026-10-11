@@ -2,24 +2,34 @@
   background: var(--sg-white);
   border: 1px solid var(--sg-warm-grey);
   border-radius: 0.95rem;
-  padding: 1.15rem 1.2rem;
+  padding: 1.2rem 1.25rem;
   min-height: 8.5rem;
   display: flex;
   flex-direction: column;
+  transition:
+    border-color 0.3s var(--anaya-ease),
+    transform 0.3s var(--anaya-ease),
+    box-shadow 0.3s var(--anaya-ease);
+}
+
+.card:hover {
+  border-color: rgba(114, 56, 61, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(50, 45, 41, 0.08);
 }
 
 .label {
   margin: 0;
   font-family: var(--font-sans-family);
-  font-size: 0.88rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--sg-taupe);
 }
 
 .value {
-  margin: 0.9rem 0 0.55rem;
+  margin: 0.95rem 0 0.55rem;
   font-family: var(--font-sans-family);
-  font-size: 1.65rem;
+  font-size: var(--text-h2);
   font-weight: 700;
   color: var(--sg-charcoal);
 }

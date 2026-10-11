@@ -9,6 +9,18 @@
   --sg-warm-grey: #d1c7bd;
   --sg-taupe: #6b5f56;
   --font-sans-family: var(--font-sans), "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --anaya-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --text-body: 0.9375rem;
+  --text-small: 0.8125rem;
+  --text-button: 1rem;
+  --text-h1: clamp(1.85rem, 3vw, 2.5rem);
+  --text-h2: clamp(1.25rem, 2vw, 1.5rem);
+  --weight-body: 400;
+  --weight-heading: 600;
+  --weight-button: 300;
+  --tracking-brand: 0.14em;
+  --button-radius: 999px;
+  --button-padding: 0.75rem 1.25rem;
 }
 
 html,
@@ -19,6 +31,9 @@ body {
   background: var(--sg-ivory);
   color: var(--sg-charcoal);
   font-family: var(--font-sans-family);
+  font-size: var(--text-body);
+  font-weight: var(--weight-body);
+  line-height: 1.55;
 }
 
 h1,
@@ -26,7 +41,10 @@ h2,
 h3,
 .brand-heading {
   font-family: var(--font-sans-family);
-  font-weight: 600;
+  font-weight: var(--weight-heading);
+  letter-spacing: -0.01em;
+  color: var(--sg-deep-plum);
+  line-height: 1.15;
 }
 
 * {
@@ -35,4 +53,14 @@ h3,
 
 a {
   color: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

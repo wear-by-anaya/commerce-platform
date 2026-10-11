@@ -21,8 +21,8 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  padding: 1.35rem 1rem 1.1rem;
+  gap: 1.35rem;
+  padding: 1.4rem 1rem 1.1rem;
   background: var(--sg-deep-plum);
   color: var(--sg-white);
   z-index: 30;
@@ -33,21 +33,39 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0 0.35rem;
+  padding: 0 0.25rem;
+}
+
+.brand,
+.mobileBrand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.brandMark {
+  flex: 0 0 auto;
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
 }
 
 .brandName {
   margin: 0;
   font-family: var(--font-sans-family);
-  font-size: 1.2rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--tracking-brand);
+  text-transform: uppercase;
+  color: #ffffff;
+  line-height: 1.2;
 }
 
 .brandSub {
-  margin: 0.3rem 0 0;
+  margin: 0.28rem 0 0;
   font-family: var(--font-sans-family);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 500;
   color: var(--sg-warm-grey);
 }
@@ -58,7 +76,6 @@
   gap: 0.3rem;
   flex: 1;
   overflow: auto;
-  padding-right: 0.15rem;
 }
 
 .navLink {
@@ -71,7 +88,9 @@
   border-radius: 0.8rem;
   color: inherit;
   text-decoration: none;
-  transition: background 0.15s ease;
+  transition:
+    background-color 0.3s var(--anaya-ease),
+    transform 0.3s var(--anaya-ease);
 }
 
 .navLink:hover,
@@ -86,13 +105,17 @@
 
 .navIcon {
   display: inline-flex;
-  opacity: 0.95;
+  transition: transform 0.3s var(--anaya-ease);
+}
+
+.navLink:hover .navIcon {
+  transform: translateX(1px);
 }
 
 .navLabel {
   font-family: var(--font-sans-family);
-  font-size: 0.95rem;
-  font-weight: 500;
+  font-size: 0.9375rem;
+  font-weight: 400;
 }
 
 .navBadge {
@@ -119,7 +142,6 @@
   margin-top: 0.35rem;
   border-radius: 999px;
   background: #e2b657;
-  box-shadow: 0 0 0 0.2rem rgba(226, 182, 87, 0.2);
 }
 
 .connectionTitle {
@@ -148,7 +170,7 @@
   gap: 1rem;
   padding: 1rem 2rem;
   border-bottom: 1px solid var(--sg-warm-grey);
-  background: rgba(245, 240, 234, 0.88);
+  background: rgba(245, 240, 234, 0.9);
   backdrop-filter: blur(8px);
   position: sticky;
   top: 0;
@@ -178,6 +200,7 @@
 
 .main {
   padding: 1.5rem 2rem 2.5rem;
+  animation: rise 0.4s var(--anaya-ease);
 }
 
 .iconButton {
@@ -191,10 +214,26 @@
   background: rgba(255, 255, 255, 0.1);
   color: inherit;
   cursor: pointer;
+  transition: background-color 0.3s var(--anaya-ease), transform 0.3s var(--anaya-ease);
+}
+
+.iconButton:hover {
+  background: rgba(255, 255, 255, 0.16);
 }
 
 .closeDesktopHidden {
   display: none;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 900px) {
@@ -215,13 +254,19 @@
     color: var(--sg-white);
   }
 
+  .mobileBrand .brandMark {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
   .mobileBrand .brandName {
-    font-size: 1rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
   }
 
   .mobileBrand .brandSub {
     margin-top: 0.1rem;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
   }
 
   .desktopTop {
@@ -235,7 +280,7 @@
     width: min(20rem, 88vw);
     height: 100vh;
     transform: translateX(-105%);
-    transition: transform 0.2s ease;
+    transition: transform 0.45s var(--anaya-ease);
   }
 
   .navOpen .sidebar {
@@ -249,6 +294,7 @@
     inset: 0;
     z-index: 25;
     background: rgba(50, 45, 41, 0.45);
+    animation: fade 0.3s var(--anaya-ease);
   }
 
   .closeDesktopHidden {
@@ -258,9 +304,9 @@
   .main {
     padding: 1.15rem 1rem 2rem;
   }
+}
 
-  .statusChip {
-    font-size: 0.62rem;
-    padding: 0.18rem 0.45rem;
-  }
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

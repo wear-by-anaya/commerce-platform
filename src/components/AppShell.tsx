@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
@@ -45,8 +46,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <Icon name={open ? "close" : "menu"} />
         </button>
         <div className={styles.mobileBrand}>
-          <p className={styles.brandName}>{STORE_BRAND}</p>
-          <p className={styles.brandSub}>Operations</p>
+          <Image
+            src="/brand-mark-inverse.png"
+            alt=""
+            width={28}
+            height={28}
+            className={styles.brandMark}
+          />
+          <div>
+            <p className={styles.brandName}>{STORE_BRAND}</p>
+            <p className={styles.brandSub}>Operations</p>
+          </div>
         </div>
         <span className={styles.statusChip}>NOT CONNECTED</span>
       </header>
@@ -62,8 +72,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <aside id={panelId} className={styles.sidebar} aria-label="Application">
         <div className={styles.sidebarHeader}>
           <div className={styles.brand}>
-            <p className={styles.brandName}>{STORE_BRAND}</p>
-            <p className={styles.brandSub}>Operations Platform</p>
+            <Image
+              src="/brand-mark-inverse.png"
+              alt=""
+              width={40}
+              height={40}
+              className={styles.brandMark}
+              priority
+            />
+            <div>
+              <p className={styles.brandName}>{STORE_BRAND}</p>
+              <p className={styles.brandSub}>Operations Platform</p>
+            </div>
           </div>
           <button
             type="button"
