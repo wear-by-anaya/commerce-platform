@@ -53,9 +53,9 @@
 
 .brandName {
   margin: 0;
-  font-size: 0.78rem;
+  font-size: var(--text-small);
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--accent);
   line-height: 1.2;
@@ -64,7 +64,7 @@
 .brandProduct,
 .brandProductInline {
   margin: 0;
-  font-size: 0.78rem;
+  font-size: var(--text-small);
   color: var(--muted);
   font-weight: 500;
 }
@@ -100,9 +100,9 @@
 
 .groupLabel {
   margin: 0 0 0.4rem 0.55rem;
-  font-size: 0.68rem;
+  font-size: var(--text-label);
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -120,11 +120,12 @@
   grid-template-columns: 1.1rem 1fr auto;
   align-items: center;
   gap: 0.7rem;
-  min-height: 2.4rem;
-  padding: 0.45rem 0.7rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.7rem;
   border-radius: 0.7rem;
   text-decoration: none;
   color: var(--sidebar-ink);
+  font-size: var(--text-secondary);
   transition: background 0.25s var(--ease), color 0.25s var(--ease);
 }
 
@@ -156,7 +157,7 @@
   padding: 0.9rem 1.1rem;
   border-top: 1px solid var(--line);
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: var(--text-small);
 }
 
 .dot {
@@ -190,7 +191,7 @@
 .topHint,
 .topStatus {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: var(--text-small);
   color: var(--muted);
 }
 
@@ -224,9 +225,9 @@
   align-items: center;
   gap: 0.55rem;
   min-width: 0;
-  font-size: 0.78rem;
+  font-size: var(--text-small);
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent);
 }

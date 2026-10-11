@@ -32,14 +32,16 @@
 
 .title {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: var(--text-secondary);
   font-weight: 700;
+  color: var(--ink);
 }
 
 .description {
-  margin: 0.2rem 0 0;
-  font-size: 0.8rem;
+  margin: 0.25rem 0 0;
+  font-size: var(--text-small);
   color: var(--muted);
+  line-height: 1.45;
 }
 
 .close {

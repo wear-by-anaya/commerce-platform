@@ -7,12 +7,13 @@
 }
 
 .title {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
 
 .description {
-  margin: 0.5rem 0 0;
+  margin: 0.55rem 0 0;
   max-width: 34rem;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: var(--text-secondary);
+  line-height: var(--leading-body);
 }

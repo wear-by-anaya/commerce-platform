@@ -2,21 +2,21 @@
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  padding: 1rem 1.1rem;
+  padding: 1.1rem 1.15rem;
   box-shadow: var(--shadow);
   min-height: 5.75rem;
 }
 
 .label {
   margin: 0;
-  font-size: 0.82rem;
+  font-size: var(--text-small);
   color: var(--muted);
   font-weight: 600;
 }
 
 .value {
-  margin: 0.65rem 0 0;
-  font-size: 1.55rem;
+  margin: 0.7rem 0 0;
+  font-size: 1.65rem;
   font-weight: 700;
   color: var(--ink);
 }
