@@ -1,0 +1,26 @@
+.card {
+  background: #fffdf9;
+  border: 1px solid #e7e0d6;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  min-height: 8rem;
+}
+
+.label {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.value {
+  margin: 0.85rem 0 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 650;
+}
+
+.status {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: #78716c;
+}

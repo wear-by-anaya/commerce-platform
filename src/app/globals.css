@@ -1,0 +1,11 @@
+html, body {
+  max-width: 100vw;
+  margin: 0;
+  padding: 0;
+  background: #f6f3ee;
+  color: #1c1917;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+* { box-sizing: border-box; }
+a { color: inherit; }

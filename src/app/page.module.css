@@ -1,0 +1,25 @@
+.page { max-width: 1100px; }
+.header { margin-bottom: 2rem; }
+.title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 650;
+}
+.subtitle {
+  margin: 0.35rem 0 0;
+  font-size: 1.25rem;
+  opacity: 0.85;
+}
+.note {
+  margin: 1rem 0 0;
+  max-width: 42rem;
+  color: #57534e;
+  font-family: system-ui, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
