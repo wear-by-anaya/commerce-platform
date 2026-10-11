@@ -285,6 +285,19 @@
     pointer-events: auto;
   }
 
+  .brand {
+    justify-content: flex-end;
+    align-items: center;
+    min-height: 3.5rem;
+    padding: 0 0.85rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .brandRow,
+  .brandProductInline {
+    display: none;
+  }
+
   .menuClose {
     display: inline-flex;
   }
