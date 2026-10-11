@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import { Icon } from "@/components/icons";
 import { Badge } from "@/components/ui/Badge";
+import { BRAND_LOGO, BRAND_MARK } from "@/lib/brand-assets";
 import { STORE_BRAND } from "@/lib/config";
 import { NAV_GROUPS } from "@/lib/nav";
 import styles from "./AppShell.module.css";
@@ -35,6 +36,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className={`${styles.shell} ${open ? styles.open : ""}`}>
       <header className={styles.topMobile}>
+        <div className={styles.mobileTitle}>
+          {BRAND_MARK.show ? (
+            <Image
+              src={BRAND_MARK.src}
+              alt=""
+              width={BRAND_MARK.width}
+              height={BRAND_MARK.height}
+              className={styles.brandMark}
+            />
+          ) : null}
+          <span>{STORE_BRAND}</span>
+        </div>
         <button
           type="button"
           className={styles.menuBtn}
@@ -45,36 +58,54 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         >
           <Icon name={open ? "close" : "menu"} />
         </button>
-        <div className={styles.mobileTitle}>
-          <Image src="/brand-mark.png" alt="" width={24} height={24} />
-          <span>{STORE_BRAND}</span>
-        </div>
       </header>
-
-      {open ? (
-        <button
-          type="button"
-          className={styles.backdrop}
-          aria-label="Close menu"
-          onClick={() => setOpen(false)}
-        />
-      ) : null}
 
       <aside id={panelId} className={styles.sidebar}>
         <div className={styles.brand}>
-          <Image
-            src="/brand-mark.png"
-            alt=""
-            width={32}
-            height={32}
-            className={styles.brandMark}
-            priority
-          />
-          <div className={styles.brandText}>
-            <p className={styles.brandName}>{STORE_BRAND}</p>
-            <p className={styles.brandProduct}>Operations</p>
+          <div className={styles.brandRow}>
+            {BRAND_LOGO.show ? (
+              <Image
+                src={BRAND_LOGO.src}
+                alt={STORE_BRAND}
+                width={BRAND_LOGO.width}
+                height={BRAND_LOGO.height}
+                className={styles.brandLogo}
+                priority
+              />
+            ) : BRAND_MARK.show ? (
+              <>
+                <Image
+                  src={BRAND_MARK.src}
+                  alt=""
+                  width={BRAND_MARK.width}
+                  height={BRAND_MARK.height}
+                  className={styles.brandMark}
+                  priority
+                />
+                <div className={styles.brandText}>
+                  <p className={styles.brandName}>{STORE_BRAND}</p>
+                  <p className={styles.brandProduct}>Operations</p>
+                </div>
+              </>
+            ) : (
+              <div className={styles.brandText}>
+                <p className={styles.brandName}>{STORE_BRAND}</p>
+                <p className={styles.brandProduct}>Operations</p>
+              </div>
+            )}
           </div>
+          <button
+            type="button"
+            className={styles.menuClose}
+            aria-label="Close menu"
+            onClick={() => setOpen(false)}
+          >
+            <Icon name="close" />
+          </button>
         </div>
+        {BRAND_LOGO.show ? (
+          <p className={styles.brandProductInline}>Operations</p>
+        ) : null}
 
         <nav className={styles.nav} aria-label="Primary">
           {NAV_GROUPS.map((group) => (
