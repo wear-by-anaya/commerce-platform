@@ -6,14 +6,14 @@ export function PageHeader({
   actions,
 }: {
   title: string;
-  description: string;
+  description?: string;
   actions?: React.ReactNode;
 }) {
   return (
     <header className={styles.header}>
-      <div className={styles.copy}>
+      <div>
         <h1 className={styles.title}>{title}</h1>
-        <p className={styles.description}>{description}</p>
+        {description ? <p className={styles.description}>{description}</p> : null}
       </div>
       {actions ? <div className={styles.actions}>{actions}</div> : null}
     </header>

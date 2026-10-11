@@ -7,7 +7,7 @@ import { useEffect, useId, useState } from "react";
 import { Icon } from "@/components/icons";
 import { Badge } from "@/components/ui/Badge";
 import { STORE_BRAND } from "@/lib/config";
-import { NAV_ITEMS } from "@/lib/nav";
+import { NAV_GROUPS } from "@/lib/nav";
 import styles from "./AppShell.module.css";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -33,113 +33,93 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <div className={`${styles.shell} ${open ? styles.navOpen : ""}`}>
-      <header className={styles.mobileBar}>
+    <div className={`${styles.shell} ${open ? styles.open : ""}`}>
+      <header className={styles.topMobile}>
         <button
           type="button"
-          className={styles.iconButton}
-          aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+          className={styles.menuBtn}
+          aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           aria-controls={panelId}
-          onClick={() => setOpen((value) => !value)}
+          onClick={() => setOpen((v) => !v)}
         >
           <Icon name={open ? "close" : "menu"} />
         </button>
-        <div className={styles.mobileBrand}>
-          <Image
-            src="/brand-mark-inverse.png"
-            alt=""
-            width={28}
-            height={28}
-            className={styles.brandMark}
-          />
-          <div>
-            <p className={styles.brandName}>{STORE_BRAND}</p>
-            <p className={styles.brandSub}>Operations</p>
-          </div>
+        <div className={styles.mobileTitle}>
+          <Image src="/brand-mark.png" alt="" width={24} height={24} />
+          <span>{STORE_BRAND}</span>
         </div>
-        <span className={styles.statusChip}>NOT CONNECTED</span>
       </header>
 
       {open ? (
-        <div
+        <button
+          type="button"
           className={styles.backdrop}
+          aria-label="Close menu"
           onClick={() => setOpen(false)}
-          aria-hidden="true"
         />
       ) : null}
 
-      <aside id={panelId} className={styles.sidebar} aria-label="Application">
-        <div className={styles.sidebarHeader}>
-          <div className={styles.brand}>
-            <Image
-              src="/brand-mark-inverse.png"
-              alt=""
-              width={40}
-              height={40}
-              className={styles.brandMark}
-              priority
-            />
-            <div>
-              <p className={styles.brandName}>{STORE_BRAND}</p>
-              <p className={styles.brandSub}>Operations Platform</p>
-            </div>
+      <aside id={panelId} className={styles.sidebar}>
+        <div className={styles.brand}>
+          <Image
+            src="/brand-mark.png"
+            alt=""
+            width={32}
+            height={32}
+            className={styles.brandMark}
+            priority
+          />
+          <div className={styles.brandText}>
+            <p className={styles.brandName}>{STORE_BRAND}</p>
+            <p className={styles.brandProduct}>Operations</p>
           </div>
-          <button
-            type="button"
-            className={`${styles.iconButton} ${styles.closeDesktopHidden}`}
-            aria-label="Close navigation menu"
-            onClick={() => setOpen(false)}
-          >
-            <Icon name="close" />
-          </button>
         </div>
 
         <nav className={styles.nav} aria-label="Primary">
-          {NAV_ITEMS.map((item) => {
-            const active = isActive(item.href);
-            const showBadge =
-              typeof item.badgeCount === "number" && item.badgeCount > 0;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`${styles.navLink} ${active ? styles.navLinkActive : ""}`}
-                aria-current={active ? "page" : undefined}
-                onClick={() => setOpen(false)}
-              >
-                <span className={styles.navIcon}>
-                  <Icon name={item.icon} />
-                </span>
-                <span className={styles.navLabel}>{item.label}</span>
-                {showBadge ? (
-                  <span className={styles.navBadge}>
-                    <Badge tone={item.badgeTone ?? "neutral"}>
-                      {item.badgeCount}
-                    </Badge>
-                  </span>
-                ) : null}
-              </Link>
-            );
-          })}
+          {NAV_GROUPS.map((group) => (
+            <div key={group.label} className={styles.group}>
+              <p className={styles.groupLabel}>{group.label}</p>
+              <ul className={styles.list}>
+                {group.items.map((item) => {
+                  const active = isActive(item.href);
+                  const showBadge =
+                    typeof item.badgeCount === "number" && item.badgeCount > 0;
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className={`${styles.link} ${active ? styles.active : ""}`}
+                        aria-current={active ? "page" : undefined}
+                        onClick={() => setOpen(false)}
+                      >
+                        <Icon name={item.icon} />
+                        <span>{item.label}</span>
+                        {showBadge ? (
+                          <Badge tone={item.badgeTone ?? "neutral"}>
+                            {item.badgeCount}
+                          </Badge>
+                        ) : null}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
         </nav>
 
-        <div className={styles.sidebarFooter}>
-          <div className={styles.connectionCard}>
-            <span className={styles.connectionDot} aria-hidden="true" />
-            <div>
-              <p className={styles.connectionTitle}>System status</p>
-              <p className={styles.connectionText}>NOT CONNECTED</p>
-            </div>
-          </div>
+        <div className={styles.footer}>
+          <span className={styles.dot} aria-hidden="true" />
+          <span>Connections offline</span>
         </div>
       </aside>
 
-      <div className={styles.content}>
-        <div className={styles.desktopTop}>
-          <p className={styles.desktopEyebrow}>Internal operations</p>
-          <span className={styles.statusChip}>NOT CONNECTED</span>
-        </div>
+      <div className={styles.workspace}>
+        <header className={styles.topDesktop}>
+          <p className={styles.topHint}>Internal workspace</p>
+          <p className={styles.topStatus}>Connections offline</p>
+        </header>
         <main className={styles.main}>{children}</main>
       </div>
     </div>

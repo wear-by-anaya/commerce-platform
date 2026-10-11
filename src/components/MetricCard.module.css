@@ -1,45 +1,22 @@
 .card {
-  background: var(--sg-white);
-  border: 1px solid var(--sg-warm-grey);
-  border-radius: 0.95rem;
-  padding: 1.2rem 1.25rem;
-  min-height: 8.5rem;
-  display: flex;
-  flex-direction: column;
-  transition:
-    border-color 0.3s var(--anaya-ease),
-    transform 0.3s var(--anaya-ease),
-    box-shadow 0.3s var(--anaya-ease);
-}
-
-.card:hover {
-  border-color: rgba(114, 56, 61, 0.35);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(50, 45, 41, 0.08);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.1rem;
+  box-shadow: var(--shadow);
+  min-height: 5.75rem;
 }
 
 .label {
   margin: 0;
-  font-family: var(--font-sans-family);
-  font-size: 0.875rem;
+  font-size: 0.82rem;
+  color: var(--muted);
   font-weight: 600;
-  color: var(--sg-taupe);
 }
 
 .value {
-  margin: 0.95rem 0 0.55rem;
-  font-family: var(--font-sans-family);
-  font-size: var(--text-h2);
+  margin: 0.65rem 0 0;
+  font-size: 1.55rem;
   font-weight: 700;
-  color: var(--sg-charcoal);
-}
-
-.status {
-  margin-top: auto;
-  margin-bottom: 0;
-  font-family: var(--font-sans-family);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: var(--sg-burgundy);
+  color: var(--ink);
 }

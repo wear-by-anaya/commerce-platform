@@ -1,17 +1,11 @@
-﻿import { PageHeader } from "@/components/PageHeader";
-import { PlaceholderPanel } from "@/components/PlaceholderPanel";
+﻿import { EmptyState } from "@/components/EmptyState";
+import { PageHeader } from "@/components/PageHeader";
 
 export default function Page() {
   return (
     <>
-      <PageHeader
-        title="Settings"
-        description="Store identity, connection status, and environment configuration."
-      />
-      <PlaceholderPanel
-        title="Settings workspace"
-        body="Only non-sensitive STORE_SLUG identity is configured. Secrets stay in environment variables."
-      />
+      <PageHeader title="Settings" description="Workspace identity and connection configuration." />
+      <EmptyState title="Settings limited" description="Only non-sensitive store identity is configured. Secrets stay in environment variables." />
     </>
   );
 }

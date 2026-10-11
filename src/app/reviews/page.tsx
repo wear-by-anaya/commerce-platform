@@ -1,17 +1,11 @@
-﻿import { PageHeader } from "@/components/PageHeader";
-import { PlaceholderPanel } from "@/components/PlaceholderPanel";
+﻿import { EmptyState } from "@/components/EmptyState";
+import { PageHeader } from "@/components/PageHeader";
 
 export default function Page() {
   return (
     <>
-      <PageHeader
-        title="Reviews"
-        description="Queue operational reviews and exception handling."
-      />
-      <PlaceholderPanel
-        title="Reviews workspace"
-        body="Review queues and alerts are placeholder-only until backend services exist."
-      />
+      <PageHeader title="Reviews" description="Operational exceptions and review queues." />
+      <EmptyState title="Review queue empty" description="Alerts and reviews will show here after backend services exist." />
     </>
   );
 }

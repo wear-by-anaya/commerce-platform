@@ -1,17 +1,11 @@
-﻿import { PageHeader } from "@/components/PageHeader";
-import { PlaceholderPanel } from "@/components/PlaceholderPanel";
+﻿import { EmptyState } from "@/components/EmptyState";
+import { PageHeader } from "@/components/PageHeader";
 
 export default function Page() {
   return (
     <>
-      <PageHeader
-        title="Designers"
-        description="Browse designer sources and mapping health for this store."
-      />
-      <PlaceholderPanel
-        title="Designers workspace"
-        body="Designer directories and source adapters will arrive with the shared engine integration."
-      />
+      <PageHeader title="Designers" description="Designer sources and mapping health for this store." />
+      <EmptyState title="No designers loaded" description="Designer directories will arrive with source adapters." />
     </>
   );
 }

@@ -1,17 +1,11 @@
-﻿import { PageHeader } from "@/components/PageHeader";
-import { PlaceholderPanel } from "@/components/PlaceholderPanel";
+﻿import { EmptyState } from "@/components/EmptyState";
+import { PageHeader } from "@/components/PageHeader";
 
 export default function Page() {
   return (
     <>
-      <PageHeader
-        title="Sync Runs"
-        description="Inspect stock sync history, checkpoints, and run outcomes."
-      />
-      <PlaceholderPanel
-        title="Sync runs workspace"
-        body="No sync worker, cron, or run history is started from this repository."
-      />
+      <PageHeader title="Sync runs" description="History and outcomes for stock synchronization." />
+      <EmptyState title="No sync runs" description="Workers are not started from this operations app." />
     </>
   );
 }

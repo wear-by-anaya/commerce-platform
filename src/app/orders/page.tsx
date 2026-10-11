@@ -1,17 +1,11 @@
-﻿import { PageHeader } from "@/components/PageHeader";
-import { PlaceholderPanel } from "@/components/PlaceholderPanel";
+﻿import { EmptyState } from "@/components/EmptyState";
+import { PageHeader } from "@/components/PageHeader";
 
 export default function Page() {
   return (
     <>
-      <PageHeader
-        title="Orders"
-        description="Monitor and triage storefront orders once Shopify is connected."
-      />
-      <PlaceholderPanel
-        title="Orders workspace"
-        body="No order feed, customer data, or revenue totals are loaded in this boilerplate."
-      />
+      <PageHeader title="Orders" description="Review and manage storefront orders when Shopify is connected." />
+      <EmptyState title="Orders will appear here" description="No order feed is connected in this boilerplate." />
     </>
   );
 }
