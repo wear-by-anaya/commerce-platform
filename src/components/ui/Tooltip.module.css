@@ -9,7 +9,7 @@
   z-index: 40;
   max-width: 14rem;
   padding: 0.45rem 0.6rem;
-  border-radius: 0.35rem;
+  border-radius: var(--radius);
   background: #111111;
   color: #ffffff;
   font-size: 0.72rem;

@@ -1,0 +1,182 @@
+.page {
+  width: 100%;
+  max-width: 210mm;
+  margin: 0 auto;
+  padding: 32px 24px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.seller {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.logo {
+  flex-shrink: 0;
+}
+
+.brand {
+  margin: 0 0 4px;
+  font-family: var(--font-sans-family);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.line {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.kind {
+  margin: 0 0 16px;
+  font-family: var(--font-sans-family);
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.parties {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.label,
+.meta dt {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 16px;
+  margin: 0;
+}
+
+.meta dd {
+  margin: 0;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+}
+
+.table th {
+  padding: 8px;
+  background: var(--bg);
+  font-size: 0.75rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table th:first-child {
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+
+.table th:last-child {
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.table td {
+  padding: 8px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.table .num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.totals {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 0;
+  width: 100%;
+  max-width: 340px;
+  margin: 24px 0 0 auto;
+}
+
+.totals dt,
+.totals dd {
+  margin: 0;
+}
+
+.totals dd {
+  text-align: right;
+  padding-left: 32px;
+  white-space: nowrap;
+}
+
+.grand {
+  padding-top: 8px;
+  border-top: 1px solid var(--ink);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.accept {
+  display: grid;
+  gap: 24px;
+  margin-top: 40px;
+  max-width: 340px;
+}
+
+.accept p {
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.legal {
+  margin-top: 40px;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .page {
+    min-height: 297mm;
+    padding: 15mm;
+  }
+
+  .parties {
+    grid-template-columns: 1fr 1fr auto;
+  }
+}
+
+@media print {
+  .page {
+    max-width: none;
+    min-height: 0;
+    padding: 0;
+  }
+
+  .tableWrap {
+    overflow: visible;
+  }
+
+  .table {
+    min-width: 0;
+  }
+
+  .parties {
+    grid-template-columns: 1fr 1fr auto;
+  }
+}
