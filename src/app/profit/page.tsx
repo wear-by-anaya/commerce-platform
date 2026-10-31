@@ -9,10 +9,11 @@ import table from "@/components/OrdersTable.module.css";
 import { PageHeader } from "@/components/PageHeader";
 import buttons from "@/components/ui/Button.module.css";
 import form from "@/components/ui/Form.module.css";
+import { pageFrom, Pagination, withParams } from "@/components/ui/Pagination";
 import { SkeletonCards, SkeletonTable } from "@/components/ui/Skeleton";
 import { isDatabaseConnected } from "@/lib/db";
 import { formatTotal } from "@/lib/invoice";
-import { expenses, profitByOrder } from "@/lib/profit";
+import { expenses, PROFIT_PAGE_SIZE, profitByOrder } from "@/lib/profit";
 import { isShopifyConnected } from "@/lib/shopify/client";
 import { formatDate } from "@/lib/shopify/orders";
 import styles from "../costs/page.module.css";
@@ -21,12 +22,21 @@ export const metadata: Metadata = { title: "Profit" };
 
 const percent = (value: number | null) => (value === null ? "-" : `${Math.round(value * 1000) / 10}%`);
 
-async function Profit() {
+type Search = Promise<Record<string, string | string[] | undefined>>;
+const one = (value: string | string[] | undefined) => (typeof value === "string" && value.length < 400 ? value : undefined);
+
+async function Profit({ searchParams }: { searchParams: Search }) {
   await connection();
+  const params = await searchParams;
+  const page = pageFrom(params.p);
   if (!isShopifyConnected() || !isDatabaseConnected()) {
     return <EmptyState title="Not connected yet" description="Profit needs both Shopify and the database (see Settings)." />;
   }
-  const [{ rows, currency, rates, errors }, spend] = await Promise.all([profitByOrder(), expenses()]);
+  const [{ rows, currency, rates, pageInfo, errors }, spend] = await Promise.all([
+    profitByOrder({ after: one(params.after), before: one(params.before) }),
+    expenses(),
+  ]);
+  const from = (page - 1) * PROFIT_PAGE_SIZE + 1;
   const money = (value: number) => formatTotal(value, currency);
   const sum = (key: "revenue" | "productCost" | "shipping" | "other" | "profit") => rows.reduce((t, r) => t + r[key], 0);
   const revenue = sum("revenue");
@@ -37,7 +47,7 @@ async function Profit() {
     <>
       {errors.length ? <p className={styles.notice}>Some order details could not be read: {errors[0]}</p> : null}
       <section className={styles.metrics} aria-label="Totals">
-        <MetricCard label={`Sales · ${rows.length} orders`} value={money(revenue)} />
+        <MetricCard label={`Sales · ${rows.length} orders on this page`} value={money(revenue)} />
         <MetricCard label="Product cost" value={money(sum("productCost"))} />
         <MetricCard label="Shipping and other" value={money(sum("shipping") + sum("other"))} />
         <MetricCard label={`Profit · margin ${percent(revenue ? profit / revenue : null)}`} value={money(profit)} />
@@ -115,16 +125,21 @@ async function Profit() {
       ) : (
         <EmptyState title="No orders to count" description="Cancelled orders are left out. Profit shows here once orders come in." />
       )}
+      <Pagination
+        prevHref={pageInfo?.hasPreviousPage && pageInfo.startCursor && page > 1 ? withParams("/profit", params, { after: null, before: pageInfo.startCursor, p: page > 2 ? String(page - 1) : null }) : null}
+        nextHref={pageInfo?.hasNextPage && pageInfo.endCursor ? withParams("/profit", params, { before: null, after: pageInfo.endCursor, p: String(page + 1) }) : null}
+        label={`Orders ${from}–${from + PROFIT_PAGE_SIZE - 1}`}
+      />
     </>
   );
 }
 
-export default function Page() {
+export default function Page({ searchParams }: { searchParams: Search }) {
   return (
     <>
       <PageHeader
         title="Profit"
-        description="Last 25 orders in PKR, cancelled ones left out. Each cost goes under this store, which made the sale."
+        description="Orders in PKR, 25 per page, cancelled ones left out. Each cost goes under this store, which made the sale."
         actions={
           <Link href="/costs" className={buttons.secondary}>
             Costs
@@ -139,7 +154,7 @@ export default function Page() {
           </div>
         }
       >
-        <Profit />
+        <Profit searchParams={searchParams} />
       </Suspense>
     </>
   );

@@ -100,14 +100,22 @@ export async function getManualInvoice(id: number) {
   return rows[0] ? toInvoice(rows[0]) : null;
 }
 
-export async function listManualInvoices() {
+export const INVOICES_PER_PAGE = 20;
+
+/** One page of saved invoices, newest first, with the total count for the page controls. */
+export async function listManualInvoices(page = 1) {
   await requireUser();
   const sql = await db();
-  const rows = (await sql`SELECT * FROM manual_invoices ORDER BY id DESC LIMIT 100`) as Row[];
-  return rows.map((row) => {
+  const offset = (page - 1) * INVOICES_PER_PAGE;
+  const [rows, count] = await Promise.all([
+    sql`SELECT * FROM manual_invoices ORDER BY id DESC LIMIT ${INVOICES_PER_PAGE} OFFSET ${offset}`,
+    sql`SELECT count(*)::int AS n FROM manual_invoices`,
+  ]);
+  const items = (rows as Row[]).map((row) => {
     const invoice = toInvoice(row);
     return { id: row.id, invoice, total: invoiceTotals(invoice).total };
   });
+  return { items, total: Number(count[0]?.n ?? 0) };
 }
 
 export async function deleteManualInvoice(id: number) {

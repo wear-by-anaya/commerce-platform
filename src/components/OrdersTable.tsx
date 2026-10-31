@@ -2,13 +2,30 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { EmptyState } from "@/components/EmptyState";
 import { Badge } from "@/components/ui/Badge";
+import { pageFrom, Pagination, withParams } from "@/components/ui/Pagination";
 import { formatTotal } from "@/lib/invoice";
 import { isShopifyConnected } from "@/lib/shopify/client";
 import { formatDate, listOrders, type OrderSummary } from "@/lib/shopify/orders";
 import styles from "./OrdersTable.module.css";
 
-/** Latest orders from Shopify, or an empty state when the store is not connected. */
-export async function RecentOrders({ first = 50 }: { first?: number }) {
+type Params = Record<string, string | string[] | undefined>;
+const one = (value: string | string[] | undefined) => (typeof value === "string" && value.length < 400 ? value : undefined);
+
+/**
+ * Orders from Shopify, newest first, or an empty state when the store is not connected.
+ * With `path`, shows page controls; the page lives in the URL (?after= / ?before= / ?p=) so it can be shared and reloaded.
+ */
+export async function RecentOrders({
+  first = 25,
+  path,
+  params = {},
+  prefix = "",
+}: {
+  first?: number;
+  path?: string;
+  params?: Params;
+  prefix?: string;
+}) {
   await connection();
   if (!isShopifyConnected()) {
     return (
@@ -18,12 +35,28 @@ export async function RecentOrders({ first = 50 }: { first?: number }) {
       />
     );
   }
-  const { orders, errors } = await listOrders(first);
+  const after = path ? one(params[`${prefix}after`]) : undefined;
+  const before = path ? one(params[`${prefix}before`]) : undefined;
+  const page = pageFrom(params[`${prefix}p`]);
+  const { orders, pageInfo, errors } = await listOrders(first, { after, before });
+  const keys = { [`${prefix}after`]: null, [`${prefix}before`]: null };
+  const prevHref =
+    path && pageInfo?.hasPreviousPage && pageInfo.startCursor && page > 1
+      ? withParams(path, params, { ...keys, [`${prefix}before`]: pageInfo.startCursor, [`${prefix}p`]: page > 2 ? String(page - 1) : null })
+      : null;
+  const nextHref =
+    path && pageInfo?.hasNextPage && pageInfo.endCursor
+      ? withParams(path, params, { ...keys, [`${prefix}after`]: pageInfo.endCursor, [`${prefix}p`]: String(page + 1) })
+      : null;
+  const from = (page - 1) * first + 1;
   return (
     <>
       {errors.length ? <p className={styles.notice}>Some order details could not be read: {errors[0]}</p> : null}
       {orders.length ? (
-        <OrdersTable orders={orders} />
+        <>
+          <OrdersTable orders={orders} />
+          <Pagination prevHref={prevHref} nextHref={nextHref} label={`Orders ${from}–${from + orders.length - 1}`} />
+        </>
       ) : (
         <EmptyState title="No orders yet" description="New orders show here as soon as they are placed." />
       )}

@@ -16,6 +16,8 @@ export type IconName =
   | "settings"
   | "menu"
   | "close"
+  | "chevronLeft"
+  | "chevronRight"
   | "info";
 
 const PATHS: Record<IconName, ReactNode> = {
@@ -107,6 +109,8 @@ const PATHS: Record<IconName, ReactNode> = {
   ),
   menu: <path d="M4 7h16M4 12h16M4 17h16" />,
   close: <path d="M6 6l12 12M18 6L6 18" />,
+  chevronLeft: <path d="M15 6l-6 6 6 6" />,
+  chevronRight: <path d="M9 6l6 6-6 6" />,
   info: (
     <>
       <circle cx="12" cy="12" r="9" />

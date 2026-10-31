@@ -1,5 +1,6 @@
 import { STORE_SLUG } from "@/lib/config";
 import { productCostSheet } from "@/lib/profit";
+import { limitFor } from "@/lib/ratelimit";
 
 const cell = (value: string | number | null) => {
   const text = value === null ? "" : String(value);
@@ -8,6 +9,8 @@ const cell = (value: string | number | null) => {
 
 /** Product costs as a CSV that opens in Excel: fill the "Own" columns, save as CSV, upload on the Costs page. */
 export async function GET() {
+  const limited = await limitFor("download");
+  if (limited) return new Response(limited, { status: 429, headers: { "content-type": "text/plain; charset=utf-8" } });
   const rows = await productCostSheet();
   const lines = [
     ["SKU", "Brand", "Product", "Weight (kg)", "Own cost (PKR)", "Cost used now (PKR)", "Cost based on", "Own shipping (PKR)"],

@@ -3,6 +3,7 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { EmptyState } from "@/components/EmptyState";
 import { PageHeader } from "@/components/PageHeader";
+import { pageFrom, Pagination, withParams } from "@/components/ui/Pagination";
 import { SkeletonList } from "@/components/ui/Skeleton";
 import { UpdatesList } from "@/components/UpdatesList";
 import { isShopifyConnected } from "@/lib/shopify/client";
@@ -23,12 +24,19 @@ async function ApiVersion() {
   return <p className={v.supported === false ? styles.alert : styles.note}>{text}</p>;
 }
 
-async function Feeds() {
+type Search = Promise<Record<string, string | string[] | undefined>>;
+const PER_PAGE = 15;
+
+async function Feeds({ searchParams }: { searchParams: Search }) {
   await connection();
+  const params = await searchParams;
   const [{ items, failed }, reviews] = await Promise.all([platformUpdates(), updateReviews()]);
   const important = items.filter((i) => i.relevant);
   const other = items.filter((i) => !i.relevant);
   const open = important.filter((i) => !reviews.has(updateKey(i))).length;
+  const pages = Math.max(1, Math.ceil(important.length / PER_PAGE));
+  const page = Math.min(pageFrom(params.page), pages);
+  const shown = important.slice((page - 1) * PER_PAGE, page * PER_PAGE);
   return (
     <>
       <ApiVersion />
@@ -37,7 +45,14 @@ async function Feeds() {
         Matters to our stores · {open ? `${open} to review` : "all reviewed"}
       </h2>
       {important.length ? (
-        <UpdatesList items={important} reviews={reviews} />
+        <>
+          <UpdatesList items={shown} reviews={reviews} />
+          <Pagination
+            prevHref={page > 1 ? withParams("/updates", params, { page: page > 2 ? String(page - 1) : null }) : null}
+            nextHref={page < pages ? withParams("/updates", params, { page: String(page + 1) }) : null}
+            label={`Page ${page} of ${pages}`}
+          />
+        </>
       ) : (
         <EmptyState title="Nothing important in the last 30 days" description="Checkout, payments, Merchant Center, search and theme news shows here." />
       )}
@@ -49,7 +64,7 @@ async function Feeds() {
   );
 }
 
-export default function Page() {
+export default function Page({ searchParams }: { searchParams: Search }) {
   return (
     <>
       <PageHeader
@@ -57,7 +72,7 @@ export default function Page() {
         description="Shopify and Google news from their official feeds, last 30 days. Tick each one once it is read, and note what we changed."
       />
       <Suspense fallback={<SkeletonList rows={6} />}>
-        <Feeds />
+        <Feeds searchParams={searchParams} />
       </Suspense>
     </>
   );

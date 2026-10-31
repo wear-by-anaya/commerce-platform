@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { COST_CURRENCIES, EVERY, EXPENSE_CATEGORIES } from "@/lib/profit";
+import { limitFor } from "@/lib/ratelimit";
 import { requireUser } from "@/lib/session";
 
 export type ActionState = { message: string | null; error: boolean };
@@ -12,7 +13,7 @@ const amount = (value: string) => (value === "" ? NaN : Number(value.replace(/,/
 const isDay = (value: string) => /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(value));
 
 export async function saveBrandDiscountAction(form: FormData) {
-  await requireUser();
+  if (await limitFor("save")) return;
   const brand = text(form, "brand").slice(0, 120);
   const percent = amount(text(form, "percent"));
   if (!brand || !Number.isFinite(percent) || percent < 0 || percent > 100) return;
@@ -23,7 +24,7 @@ export async function saveBrandDiscountAction(form: FormData) {
 }
 
 export async function deleteBrandDiscountAction(form: FormData) {
-  await requireUser();
+  if (await limitFor("save")) return;
   const sql = await db();
   await sql`DELETE FROM brand_discounts WHERE brand = ${text(form, "brand")}`;
   revalidatePath("/costs");
@@ -31,7 +32,7 @@ export async function deleteBrandDiscountAction(form: FormData) {
 
 /** Shipping per kg for Pakistan and abroad (PKR); empty = 0 (not set). */
 export async function saveShippingRatesAction(form: FormData) {
-  await requireUser();
+  if (await limitFor("save")) return;
   const pk = amount(text(form, "pakistan") || "0");
   const abroad = amount(text(form, "abroad") || "0");
   if (!Number.isFinite(pk) || !Number.isFinite(abroad) || pk < 0 || abroad < 0) return;
@@ -45,7 +46,8 @@ export async function saveShippingRatesAction(form: FormData) {
 }
 
 export async function addExpenseAction(_prev: ActionState, form: FormData): Promise<ActionState> {
-  await requireUser();
+  const limited = await limitFor("save");
+  if (limited) return { message: limited, error: true };
   const name = text(form, "name").slice(0, 120);
   const value = amount(text(form, "amount"));
   const currency = text(form, "currency");
@@ -68,7 +70,7 @@ export async function addExpenseAction(_prev: ActionState, form: FormData): Prom
 }
 
 export async function deleteExpenseAction(form: FormData) {
-  await requireUser();
+  if (await limitFor("save")) return;
   const id = Number(form.get("id"));
   if (!Number.isInteger(id)) return;
   const sql = await db();
@@ -79,7 +81,7 @@ export async function deleteExpenseAction(form: FormData) {
 
 /** Other costs for one order (packing, courier extras); shipping comes from the products. */
 export async function saveOrderCostAction(form: FormData) {
-  await requireUser();
+  if (await limitFor("save")) return;
   const orderId = text(form, "orderId");
   const other = amount(text(form, "other") || "0");
   if (!/^\d+$/.test(orderId) || !Number.isFinite(other) || other < 0) return;
@@ -117,7 +119,8 @@ function csvFields(line: string) {
  * A number saves it; an empty cell goes back to the rule (brand discount, or weight x rate).
  */
 export async function uploadProductCostsAction(_prev: ActionState, form: FormData): Promise<ActionState> {
-  await requireUser();
+  const limited = await limitFor("upload");
+  if (limited) return { message: limited, error: true };
   const file = form.get("file");
   if (!(file instanceof File) || file.size === 0) return { message: "Choose the CSV file first.", error: true };
   if (file.size > 2_000_000) return { message: "The file is too big (2 MB at most).", error: true };
@@ -158,6 +161,7 @@ export async function uploadProductCostsAction(_prev: ActionState, form: FormDat
 /** Marks a Shopify or Google update as reviewed, with what we changed (or unmarks it). */
 export async function reviewUpdateAction(form: FormData) {
   const user = await requireUser();
+  if (await limitFor("save")) return;
   const key = text(form, "key").slice(0, 600);
   if (!key) return;
   const sql = await db();

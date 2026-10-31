@@ -45,13 +45,49 @@ export async function shopifyQuery<T>(query: string, variables: Record<string, u
   } catch (error) {
     return { data: null, errors: [error instanceof Error ? error.message : "Shopify sign-in failed"] };
   }
-  const res = await fetch(`https://${process.env.SHOPIFY_STORE_DOMAIN}/admin/api/${API_VERSION}/graphql.json`, {
-    method: "POST",
-    headers: { "content-type": "application/json", "x-shopify-access-token": tokenValue },
-    body: JSON.stringify({ query, variables }),
-    cache: "no-store",
-  });
-  if (!res.ok) return { data: null, errors: [`Shopify request failed (${res.status})`] };
-  const body = (await res.json()) as { data?: T; errors?: { message: string }[] };
-  return { data: body.data ?? null, errors: (body.errors ?? []).map((e) => e.message) };
+  // Shopify limits GraphQL by query cost (a bucket that refills each second). When it answers THROTTLED or 429,
+  // wait as long as its own figures say, then try again; give up after 3 tries so a page never hangs.
+  for (let attempt = 1; ; attempt++) {
+    const res = await fetch(`https://${process.env.SHOPIFY_STORE_DOMAIN}/admin/api/${API_VERSION}/graphql.json`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-shopify-access-token": tokenValue },
+      body: JSON.stringify({ query, variables }),
+      cache: "no-store",
+    });
+    const retryable = res.status === 429 || res.status === 502 || res.status === 503;
+    if (!res.ok && !retryable) return { data: null, errors: [`Shopify request failed (${res.status})`] };
+    const body = retryable ? null : ((await res.json()) as GraphQLBody<T>);
+    const throttled = retryable || Boolean(body?.errors?.some((e) => e.extensions?.code === "THROTTLED"));
+    if (!throttled || attempt >= MAX_ATTEMPTS) {
+      if (!body) return { data: null, errors: [`Shopify is busy (${res.status}); try again in a moment`] };
+      return { data: body.data ?? null, errors: (body.errors ?? []).map((e) => e.message) };
+    }
+    await sleep(waitMs(res, body));
+  }
+}
+
+const MAX_ATTEMPTS = 3;
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+type GraphQLBody<T> = {
+  data?: T;
+  errors?: { message: string; extensions?: { code?: string } }[];
+  extensions?: {
+    cost?: {
+      requestedQueryCost: number;
+      throttleStatus: { currentlyAvailable: number; restoreRate: number };
+    };
+  };
+};
+
+/** How long to wait before retrying: Retry-After if sent, else the time the cost bucket needs to refill (0.5–5 s). */
+function waitMs(res: Response, body: GraphQLBody<unknown> | null) {
+  const retryAfter = Number(res.headers.get("retry-after"));
+  if (retryAfter > 0) return Math.min(retryAfter * 1000, 5000);
+  const cost = body?.extensions?.cost;
+  if (cost && cost.throttleStatus.restoreRate > 0) {
+    const missing = cost.requestedQueryCost - cost.throttleStatus.currentlyAvailable;
+    return Math.min(Math.max((missing / cost.throttleStatus.restoreRate) * 1000, 500), 5000);
+  }
+  return 1000;
 }

@@ -8,7 +8,7 @@ import {
   validateInvoice,
   type ManualInvoiceInput,
 } from "@/lib/manual-invoices";
-import { requireUser } from "@/lib/session";
+import { limitFor } from "@/lib/ratelimit";
 
 export type FormState = { error: string | null };
 
@@ -17,7 +17,8 @@ const lines = (value: string) => value.split("\n").map((l) => l.trim()).filter(B
 const number = (value: unknown) => (value === "" || value === null || value === undefined ? 0 : Number(value));
 
 export async function createInvoiceAction(_prev: FormState, form: FormData): Promise<FormState> {
-  await requireUser();
+  const limited = await limitFor("save");
+  if (limited) return { error: limited };
   let rawLines: { service?: unknown; description?: unknown; quantity?: unknown; rate?: unknown }[];
   try {
     rawLines = JSON.parse(text(form, "lines") || "[]");
@@ -56,7 +57,7 @@ export async function createInvoiceAction(_prev: FormState, form: FormData): Pro
 }
 
 export async function deleteInvoiceAction(form: FormData) {
-  await requireUser();
+  if (await limitFor("save")) redirect("/invoices");
   const id = Number(form.get("id"));
   if (Number.isInteger(id) && id > 0) await deleteManualInvoice(id);
   redirect("/invoices");

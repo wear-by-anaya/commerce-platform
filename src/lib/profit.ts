@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/session";
 import { shopifyQuery } from "@/lib/shopify/client";
+import type { Cursor, PageInfo } from "@/lib/shopify/orders";
 
 /** Supplier discount when a brand has no row of its own (default from the Afrozeh estimate, 31 Oct: brand price less 15%). */
 export const DEFAULT_DISCOUNT = 15;
@@ -31,8 +32,9 @@ type ProfitOrder = {
 };
 
 // 25 orders x 20 lines keeps the query under Shopify's cost limit.
-const QUERY = `query ProfitOrders {
-  orders(first: 25, sortKey: CREATED_AT, reverse: true) {
+const QUERY = `query ProfitOrders($first: Int, $last: Int, $after: String, $before: String) {
+  orders(first: $first, last: $last, after: $after, before: $before, sortKey: CREATED_AT, reverse: true) {
+    pageInfo { hasNextPage hasPreviousPage startCursor endCursor }
     nodes {
       id name createdAt cancelledAt
       currentTotalPriceSet { shopMoney { amount currencyCode } }
@@ -129,9 +131,15 @@ export function unitShipping(line: ProfitLineNode, country: string, settings: Co
   return kg ? { cost: kg * rate, basis: "by weight" } : { cost: 0, basis: "no weight" };
 }
 
-export async function profitByOrder() {
+export const PROFIT_PAGE_SIZE = 25;
+
+export async function profitByOrder(cursor: Cursor = {}) {
   await requireUser();
-  const [{ data, errors }, settings] = await Promise.all([shopifyQuery<{ orders: { nodes: ProfitOrder[] } }>(QUERY), loadCostSettings()]);
+  const vars = cursor.before ? { last: PROFIT_PAGE_SIZE, before: cursor.before } : { first: PROFIT_PAGE_SIZE, after: cursor.after ?? null };
+  const [{ data, errors }, settings] = await Promise.all([
+    shopifyQuery<{ orders: { nodes: ProfitOrder[]; pageInfo: PageInfo } }>(QUERY, vars),
+    loadCostSettings(),
+  ]);
   const rows: ProfitRow[] = (data?.orders.nodes ?? [])
     .filter((order) => !order.cancelledAt)
     .map((order) => {
@@ -173,7 +181,7 @@ export async function profitByOrder() {
       };
     });
   const currency = data?.orders.nodes[0]?.currentTotalPriceSet.shopMoney.currencyCode ?? "PKR";
-  return { rows, currency, rates: settings.rates, errors };
+  return { rows, currency, rates: settings.rates, pageInfo: data?.orders.pageInfo ?? null, errors };
 }
 
 export type Expense = {
@@ -241,7 +249,7 @@ export type SheetRow = {
 /** SKUs from recent orders plus every saved own cost, for the spreadsheet download. */
 export async function productCostSheet(): Promise<SheetRow[]> {
   await requireUser();
-  const [{ data }, settings] = await Promise.all([shopifyQuery<{ orders: { nodes: ProfitOrder[] } }>(QUERY), loadCostSettings()]);
+  const [{ data }, settings] = await Promise.all([shopifyQuery<{ orders: { nodes: ProfitOrder[] } }>(QUERY, { first: 25 }), loadCostSettings()]);
   const rows = new Map<string, SheetRow>();
   for (const order of data?.orders.nodes ?? []) {
     for (const line of order.lineItems.nodes) {

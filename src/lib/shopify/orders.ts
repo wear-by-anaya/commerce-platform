@@ -15,8 +15,9 @@ export type OrderSummary = {
   shippingAddress: { name: string | null; city: string | null; country: string | null } | null;
 };
 
-const LIST_QUERY = `query Orders($first: Int!) {
-  orders(first: $first, sortKey: CREATED_AT, reverse: true) {
+const LIST_QUERY = `query Orders($first: Int, $last: Int, $after: String, $before: String) {
+  orders(first: $first, last: $last, after: $after, before: $before, sortKey: CREATED_AT, reverse: true) {
+    pageInfo { hasNextPage hasPreviousPage startCursor endCursor }
     nodes {
       id name createdAt cancelledAt displayFinancialStatus displayFulfillmentStatus paymentGatewayNames
       totalPriceSet { presentmentMoney { amount currencyCode } }
@@ -59,9 +60,14 @@ export async function orderStats() {
   };
 }
 
-export async function listOrders(first = 50) {
-  const { data, errors } = await shopifyQuery<{ orders: { nodes: OrderSummary[] } }>(LIST_QUERY, { first });
-  return { orders: data?.orders.nodes ?? [], errors };
+export type PageInfo = { hasNextPage: boolean; hasPreviousPage: boolean; startCursor: string | null; endCursor: string | null };
+export type Cursor = { after?: string; before?: string };
+
+/** One page of orders, newest first. Shopify pages by cursor: "after" for the next page, "before" for the previous one. */
+export async function listOrders(size = 25, cursor: Cursor = {}) {
+  const vars = cursor.before ? { last: size, before: cursor.before } : { first: size, after: cursor.after ?? null };
+  const { data, errors } = await shopifyQuery<{ orders: { nodes: OrderSummary[]; pageInfo: PageInfo } }>(LIST_QUERY, vars);
+  return { orders: data?.orders.nodes ?? [], pageInfo: data?.orders.pageInfo ?? null, errors };
 }
 
 type OrderDetail = {

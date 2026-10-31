@@ -62,6 +62,12 @@ async function migrate(sql: Sql) {
     key text PRIMARY KEY,
     value text NOT NULL
   )`;
+  await sql`CREATE TABLE IF NOT EXISTS rate_limits (
+    bucket text NOT NULL,
+    window_start timestamptz NOT NULL,
+    hits integer NOT NULL DEFAULT 0,
+    PRIMARY KEY (bucket, window_start)
+  )`;
   await sql`CREATE TABLE IF NOT EXISTS update_reviews (
     item_key text PRIMARY KEY,
     reviewed_by text NOT NULL,
