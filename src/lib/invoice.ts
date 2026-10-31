@@ -53,6 +53,7 @@ export function formatAmount(value: number) {
 }
 
 export function formatTotal(value: number, currency: InvoiceData["currency"]) {
-  const symbol = currency === "PKR" ? "Rs " : currency === "GBP" ? "£" : currency + " ";
+  const symbols: Record<string, string> = { PKR: "Rs ", GBP: "£", USD: "$", EUR: "€" };
+  const symbol = symbols[currency] ?? currency + " ";
   return symbol + formatAmount(value);
 }

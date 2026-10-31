@@ -40,7 +40,7 @@ export function ExpenseForm({ categories, currencies, today }: { categories: rea
         <Select name="every" label="How often" options={EVERY} defaultValue="month" />
         <label className={`${form.field} ${form.span}`}>
           <span className={form.label}>Note (optional)</span>
-          <textarea className={form.control} name="note" rows={2} maxLength={500} placeholder="e.g. paid with the company card, invoice in email" />
+          <textarea className={form.control} name="note" maxLength={500} placeholder="e.g. paid with the company card, invoice in email" />
         </label>
       </div>
       {state.message ? (

@@ -47,7 +47,7 @@ export function InvoiceForm({ currencies, today }: { currencies: readonly string
         <div className={form.grid}>
           <label className={form.field}>
             <span className={form.label}>Bill to</span>
-            <textarea className={form.control} name="billTo" rows={4} required placeholder={"Name\nAddress line\nCity, Country"} />
+            <textarea className={form.control} name="billTo" required placeholder={"Name\nAddress line\nCity, Country"} />
             <span className={form.hint}>One line per row: name, address, city, phone.</span>
           </label>
           {sameAddress ? (
@@ -61,7 +61,7 @@ export function InvoiceForm({ currencies, today }: { currencies: readonly string
             <div className={form.field}>
               <label className={form.field}>
                 <span className={form.label}>Ship to</span>
-                <textarea className={form.control} name="shipTo" rows={4} />
+                <textarea className={form.control} name="shipTo" />
               </label>
               <label className={form.check}>
                 <input type="checkbox" name="sameAddress" checked={sameAddress} onChange={(e) => setSameAddress(e.target.checked)} />
@@ -137,7 +137,7 @@ export function InvoiceForm({ currencies, today }: { currencies: readonly string
             </div>
             <label className={form.field}>
               <span className={form.label}>Note on the invoice (optional)</span>
-              <textarea className={form.control} name="notes" rows={2} maxLength={500} placeholder="e.g. Payment by bank transfer within 7 days" />
+              <textarea className={form.control} name="notes" maxLength={500} placeholder="e.g. Payment by bank transfer within 7 days" />
             </label>
           </div>
           <dl className={styles.totals}>

@@ -30,7 +30,7 @@ async function Expenses() {
   const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Karachi" });
   return (
     <div className={form.stack}>
-      <section className={styles.metrics} aria-label="Totals">
+      <section className={`${styles.metrics} ${styles.pair}`} aria-label="Totals">
         <MetricCard label="Repeating, per month" value={totals(monthly)} />
         <MetricCard label="One-off, this month" value={totals(oneOffThisMonth)} />
       </section>

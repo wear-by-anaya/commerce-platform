@@ -51,3 +51,9 @@
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+@media (min-width: 1100px) {
+  .pair {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
