@@ -22,8 +22,10 @@
   font-weight: 600;
 }
 
-.wide {
-  min-width: 880px;
+@media (min-width: 641px) {
+  .wide {
+    min-width: 880px;
+  }
 }
 
 .wide td {

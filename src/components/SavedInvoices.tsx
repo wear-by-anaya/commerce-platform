@@ -41,14 +41,14 @@ export async function SavedInvoices({ params = {} }: { params?: Record<string, s
           <tbody>
             {rows.map(({ id, invoice, total }) => (
               <tr key={id}>
-                <td>
+                <td data-label="Number">
                   {invoice.number}
                   <span className={styles.sub}>{invoice.kind.toLowerCase()}</span>
                 </td>
-                <td>{invoice.date}</td>
-                <td>{invoice.billTo[0] ?? "-"}</td>
-                <td className={styles.num}>{formatTotal(total, invoice.currency)}</td>
-                <td>
+                <td data-label="Date">{invoice.date}</td>
+                <td data-label="Customer">{invoice.billTo[0] ?? "-"}</td>
+                <td data-label="Total" className={styles.num}>{formatTotal(total, invoice.currency)}</td>
+                <td data-label="Invoice">
                   <Link href={`/invoices/manual/${id}`}>Open</Link>
                 </td>
               </tr>

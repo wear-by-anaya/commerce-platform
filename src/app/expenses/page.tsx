@@ -68,15 +68,15 @@ async function Expenses({ searchParams }: { searchParams: Search }) {
               <tbody>
                 {list.map((e) => (
                   <tr key={e.id} className={styles.middle}>
-                    <td>
+                    <td data-label="What for">
                       {e.name}
                       {e.note ? <span className={table.sub}>{e.note}</span> : null}
                     </td>
-                    <td>{e.category}</td>
-                    <td>{e.paidOn ? displayDate(e.paidOn) : "-"}</td>
-                    <td className={table.num}>{formatTotal(e.amount, e.currency)}</td>
-                    <td>{every(e.every)}</td>
-                    <td className={table.num}>
+                    <td data-label="Category">{e.category}</td>
+                    <td data-label="Date paid">{e.paidOn ? displayDate(e.paidOn) : "-"}</td>
+                    <td data-label="Amount" className={table.num}>{formatTotal(e.amount, e.currency)}</td>
+                    <td data-label="How often">{every(e.every)}</td>
+                    <td data-label="" className={table.num}>
                       <form action={deleteExpenseAction}>
                         <input type="hidden" name="id" value={e.id} />
                         <button type="submit" className={form.iconButton} aria-label={`Remove ${e.name}`}>

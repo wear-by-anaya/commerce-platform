@@ -78,25 +78,25 @@ async function Profit({ searchParams }: { searchParams: Search }) {
             <tbody>
               {rows.map((row) => (
                 <tr key={row.orderId}>
-                  <td>
+                  <td data-label="Order">
                     {row.name}
                     <span className={table.sub}>
                       {formatDate(row.date)}
                       {row.country ? ` · ${row.country}` : ""}
                     </span>
                   </td>
-                  <td className={table.num}>{money(row.revenue)}</td>
-                  <td className={table.num}>
+                  <td data-label="Sales" className={table.num}>{money(row.revenue)}</td>
+                  <td data-label="Product cost" className={table.num}>
                     {money(row.productCost)}
                     <span className={table.sub}>{row.lines.some((l) => l.basis !== "own cost") ? "from brand prices" : "own costs"}</span>
                   </td>
-                  <td className={table.num}>
+                  <td data-label="Shipping" className={table.num}>
                     {money(row.shipping)}
                     <span className={table.sub}>
                       {row.lines.some((l) => l.shippingBasis === "no weight") ? "some pieces have no weight" : "per product"}
                     </span>
                   </td>
-                  <td>
+                  <td data-label="Other costs">
                     <form action={saveOrderCostAction} className={styles.otherForm}>
                       <input type="hidden" name="orderId" value={row.orderId} />
                       <input
@@ -115,8 +115,8 @@ async function Profit({ searchParams }: { searchParams: Search }) {
                       </button>
                     </form>
                   </td>
-                  <td className={table.num}>{money(row.profit)}</td>
-                  <td className={table.num}>{percent(row.margin)}</td>
+                  <td data-label="Profit" className={table.num}>{money(row.profit)}</td>
+                  <td data-label="Margin" className={table.num}>{percent(row.margin)}</td>
                 </tr>
               ))}
             </tbody>

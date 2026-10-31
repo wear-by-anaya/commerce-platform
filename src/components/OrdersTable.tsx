@@ -88,25 +88,25 @@ export function OrdersTable({ orders }: { orders: OrderSummary[] }) {
             const place = [order.shippingAddress?.city, order.shippingAddress?.country].filter(Boolean).join(", ");
             return (
               <tr key={order.id}>
-                <td>{order.name}</td>
-                <td>{formatDate(order.createdAt)}</td>
-                <td>
+                <td data-label="Order">{order.name}</td>
+                <td data-label="Date">{formatDate(order.createdAt)}</td>
+                <td data-label="Customer">
                   {order.shippingAddress?.name ?? "-"}
                   {place ? <span className={styles.sub}>{place}</span> : null}
                 </td>
-                <td>
+                <td data-label="Payment">
                   {order.paymentGatewayNames.join(", ") || "-"}
                   <span className={styles.sub}>{label(order.displayFinancialStatus)}</span>
                 </td>
-                <td>
+                <td data-label="Status">
                   {order.cancelledAt ? (
                     <Badge tone="warning">cancelled</Badge>
                   ) : (
                     <Badge>{label(order.displayFulfillmentStatus)}</Badge>
                   )}
                 </td>
-                <td className={styles.num}>{formatTotal(Number(total.amount), total.currencyCode)}</td>
-                <td>
+                <td data-label="Total" className={styles.num}>{formatTotal(Number(total.amount), total.currencyCode)}</td>
+                <td data-label="Invoice">
                   <Link href={`/invoices/${id}`}>Open</Link>
                 </td>
               </tr>
