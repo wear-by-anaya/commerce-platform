@@ -28,6 +28,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     };
   }, [open]);
 
+  if (pathname === "/login") return <>{children}</>;
+
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
@@ -108,6 +110,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className={styles.footer}>
           <span className={styles.dot} aria-hidden="true" />
           <span>Connections offline</span>
+          <Link href="/api/auth/signout" prefetch={false}>Sign out</Link>
         </div>
       </aside>
 
