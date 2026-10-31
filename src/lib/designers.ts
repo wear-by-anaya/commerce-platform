@@ -71,13 +71,13 @@ export async function oldestBrands(count: number) {
   return [...BRANDS].sort((a, b) => (checked.get(a.slug) ?? 0) - (checked.get(b.slug) ?? 0)).slice(0, count);
 }
 
-/** How many active products each Shopify vendor has in this store (20 counts per query to stay under Shopify's cost limit). */
+/** Shopify caps counts at 10,000 unless limit is null. How many active products each Shopify vendor has in this store (20 counts per query to stay under Shopify's cost limit). */
 async function storeCounts(vendors: string[]) {
   const counts = new Map<string, number>();
   for (let i = 0; i < vendors.length; i += 20) {
     const chunk = vendors.slice(i, i + 20);
     const fields = chunk
-      .map((v, j) => `v${j}: productsCount(query: ${JSON.stringify(`vendor:"${v.replace(/"/g, "")}" AND status:active`)}) { count }`)
+      .map((v, j) => `v${j}: productsCount(query: ${JSON.stringify(`vendor:"${v.replace(/"/g, "")}" AND status:active`)}, limit: null) { count }`)
       .join("\n");
     const { data } = await shopifyQuery<Record<string, { count: number }>>(`{ ${fields} }`);
     chunk.forEach((v, j) => counts.set(v, data?.[`v${j}`]?.count ?? 0));
@@ -108,7 +108,7 @@ export async function designers(): Promise<{ rows: DesignerRow[]; storeTotal: nu
         EXTRACT(EPOCH FROM (now() - checked_at)) / 86400 AS days FROM brand_scans`,
     sql`SELECT slug FROM brand_partners`,
     shopifyQuery<{ productVendors: { nodes: string[] } }>(`{ productVendors(first: 250) { nodes } }`),
-    shopifyQuery<{ productsCount: { count: number } }>(`{ productsCount(query: "status:active") { count } }`),
+    shopifyQuery<{ productsCount: { count: number } }>(`{ productsCount(query: "status:active", limit: null) { count } }`),
   ]);
   const scan = new Map(scans.map((r) => [String(r.slug), r]));
   const partner = new Set(partners.map((r) => String(r.slug)));
