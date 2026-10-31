@@ -3,6 +3,7 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { deleteExpenseAction } from "@/app/costs/actions";
 import { EmptyState } from "@/components/EmptyState";
+import { Icon } from "@/components/icons";
 import { ExpenseForm } from "@/components/ExpenseForm";
 import { MetricCard } from "@/components/MetricCard";
 import table from "@/components/OrdersTable.module.css";
@@ -70,7 +71,7 @@ async function Expenses() {
                     <form action={deleteExpenseAction}>
                       <input type="hidden" name="id" value={e.id} />
                       <button type="submit" className={form.iconButton} aria-label={`Remove ${e.name}`}>
-                        ×
+                        <Icon name="close" size={16} />
                       </button>
                     </form>
                   </td>

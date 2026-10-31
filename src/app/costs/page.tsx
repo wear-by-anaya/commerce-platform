@@ -3,6 +3,7 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { deleteBrandDiscountAction, saveBrandDiscountAction, saveShippingRatesAction } from "@/app/costs/actions";
 import { EmptyState } from "@/components/EmptyState";
+import { Icon } from "@/components/icons";
 import { PageHeader } from "@/components/PageHeader";
 import { ProductCostUpload } from "@/components/ProductCostUpload";
 import buttons from "@/components/ui/Button.module.css";
@@ -51,7 +52,7 @@ async function Costs() {
                 <form action={deleteBrandDiscountAction}>
                   <input type="hidden" name="brand" value={d.brand} />
                   <button type="submit" className={form.iconButton} aria-label={`Remove ${d.brand}`}>
-                    ×
+                    <Icon name="close" size={16} />
                   </button>
                 </form>
               </li>

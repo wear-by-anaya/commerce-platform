@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import { createInvoiceAction, type FormState } from "@/app/invoices/actions";
 import { formatTotal } from "@/lib/invoice";
+import { Icon } from "./icons";
 import buttons from "./ui/Button.module.css";
 import form from "./ui/Form.module.css";
 import { Select } from "./ui/Select";
@@ -107,7 +108,7 @@ export function InvoiceForm({ currencies, today }: { currencies: readonly string
                 onClick={() => setLines((all) => (all.length > 1 ? all.filter((_, i) => i !== index) : [emptyLine()]))}
                 aria-label={`Remove line ${index + 1}`}
               >
-                ×
+                <Icon name="close" size={16} />
               </button>
             </li>
           ))}

@@ -186,9 +186,11 @@ textarea.control {
   border-radius: var(--radius);
   background: transparent;
   color: var(--muted);
-  font-size: 1.25rem;
-  line-height: 1;
   cursor: pointer;
+}
+
+.iconButton svg {
+  display: block;
 }
 
 .iconButton:hover {

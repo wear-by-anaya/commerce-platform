@@ -7,6 +7,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { Icon } from "@/components/icons";
 import styles from "./Toast.module.css";
 
 type ToastTone = "info" | "success" | "warning" | "error";
@@ -72,7 +73,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               onClick={() => dismiss(item.id)}
               aria-label="Dismiss notification"
             >
-              ×
+              <Icon name="close" size={16} />
             </button>
           </div>
         ))}

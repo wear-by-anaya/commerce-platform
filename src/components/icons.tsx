@@ -1,99 +1,116 @@
 import type { ReactNode } from "react";
 
-type IconName =
+/** One line-icon set on a 24px grid, same stroke for all, so menu items line up. */
+export type IconName =
   | "dashboard"
+  | "updates"
   | "orders"
+  | "invoices"
+  | "profit"
+  | "costs"
+  | "expenses"
   | "inventory"
   | "designers"
   | "sync"
   | "reviews"
   | "settings"
-  | "bell"
-  | "chart"
-  | "wallet"
   | "menu"
   | "close"
   | "info";
 
 const PATHS: Record<IconName, ReactNode> = {
-  wallet: (
-    <>
-      <path d="M4 7h15a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7z" />
-      <path d="M4 7l11-3v3" />
-      <circle cx="16" cy="13" r="1" />
-    </>
-  ),
-  chart: (
-    <>
-      <path d="M4 20h16" />
-      <path d="M7 16v-5M12 16V7M17 16v-8" />
-    </>
-  ),
-  bell: (
-    <>
-      <path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4l2-2z" />
-      <path d="M10 20a2 2 0 0 0 4 0" />
-    </>
-  ),
+  // Four tiles: overview.
   dashboard: (
     <>
-      <rect x="3" y="3" width="7" height="7" rx="1" />
-      <rect x="14" y="3" width="7" height="7" rx="1" />
-      <rect x="3" y="14" width="7" height="7" rx="1" />
-      <rect x="14" y="14" width="7" height="7" rx="1" />
+      <rect x="3.5" y="3.5" width="7" height="7" rx="1.5" />
+      <rect x="13.5" y="3.5" width="7" height="7" rx="1.5" />
+      <rect x="3.5" y="13.5" width="7" height="7" rx="1.5" />
+      <rect x="13.5" y="13.5" width="7" height="7" rx="1.5" />
     </>
   ),
+  // Bell: Shopify and Google news.
+  updates: (
+    <>
+      <path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z" />
+      <path d="M10.3 20a1.9 1.9 0 0 0 3.4 0" />
+    </>
+  ),
+  // Shopping bag: store orders.
   orders: (
     <>
-      <path d="M6 2h12l1 4H5L6 2z" />
-      <path d="M5 6h14v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6z" />
-      <path d="M9 11h6M9 15h6" />
+      <path d="M5 8h14l-1 12.5H6L5 8z" />
+      <path d="M9 10.5V7a3 3 0 0 1 6 0v3.5" />
     </>
   ),
+  // Page with folded corner and lines: invoices.
+  invoices: (
+    <>
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z" />
+      <path d="M14 3v5h5" />
+      <path d="M9 13h6M9 17h4" />
+    </>
+  ),
+  // Rising line with arrow: profit.
+  profit: (
+    <>
+      <path d="M3 17l6-6 4 4 8-8" />
+      <path d="M15 7h6v6" />
+    </>
+  ),
+  // Price tag: costs of goods.
+  costs: (
+    <>
+      <path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z" />
+      <circle cx="7.5" cy="7.5" r="1.5" />
+    </>
+  ),
+  // Wallet: expenses.
+  expenses: (
+    <>
+      <path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3" />
+      <path d="M21 11h-4a2 2 0 0 0 0 4h4v-4z" />
+    </>
+  ),
+  // Box: stock.
   inventory: (
     <>
-      <path d="M3 7h18v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7z" />
-      <path d="M3 7l2-4h14l2 4" />
-      <path d="M10 11h4" />
+      <path d="M21 8l-9-5-9 5v8l9 5 9-5V8z" />
+      <path d="M3 8l9 5 9-5M12 13v8" />
     </>
   ),
+  // Hanger: designers (brands).
   designers: (
     <>
-      <circle cx="12" cy="8" r="3.5" />
-      <path d="M5 19a7 7 0 0 1 14 0" />
+      <path d="M12 8a2 2 0 1 1 2-2c0 1.2-2 1.6-2 3v1" />
+      <path d="M12 10l9 6.5a1 1 0 0 1-.6 1.8H3.6a1 1 0 0 1-.6-1.8L12 10z" />
     </>
   ),
+  // Two arrows in a circle: sync runs.
   sync: (
     <>
-      <path d="M4 12a8 8 0 0 1 13.5-5.5L20 4v6h-6" />
-      <path d="M20 12a8 8 0 0 1-13.5 5.5L4 20v-6h6" />
+      <path d="M20 11a8 8 0 0 0-14.3-4.7L4 8" />
+      <path d="M4 4v4h4" />
+      <path d="M4 13a8 8 0 0 0 14.3 4.7L20 16" />
+      <path d="M20 20v-4h-4" />
     </>
   ),
+  // Star: reviews and alerts.
   reviews: (
-    <>
-      <path d="M12 3l2.2 4.5 5 .7-3.6 3.5.9 5.1L12 14.8 7.5 16.8l.9-5.1L4.8 8.2l5-.7L12 3z" />
-    </>
+    <path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8-4.3-4.1 5.9-.9L12 3.5z" />
   ),
+  // Gear: settings.
   settings: (
     <>
       <circle cx="12" cy="12" r="3" />
-      <path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6" />
+      <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" />
     </>
   ),
-  menu: (
-    <>
-      <path d="M4 7h16M4 12h16M4 17h16" />
-    </>
-  ),
-  close: (
-    <>
-      <path d="M6 6l12 12M18 6L6 18" />
-    </>
-  ),
+  menu: <path d="M4 7h16M4 12h16M4 17h16" />,
+  close: <path d="M6 6l12 12M18 6L6 18" />,
   info: (
     <>
       <circle cx="12" cy="12" r="9" />
-      <path d="M12 10v6M12 7h.01" />
+      <path d="M12 11v5M12 7.5h.01" />
     </>
   ),
 };
@@ -119,6 +136,8 @@ export function Icon({
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
+      focusable="false"
+      style={{ display: "block", flex: "none" }}
     >
       {PATHS[name]}
     </svg>
