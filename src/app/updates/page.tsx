@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { EmptyState } from "@/components/EmptyState";
 import { PageHeader } from "@/components/PageHeader";
 import { pageFrom, Pagination, withParams } from "@/components/ui/Pagination";
+import { SearchBar } from "@/components/ui/SearchBox";
 import { SkeletonList } from "@/components/ui/Skeleton";
 import { UpdatesList } from "@/components/UpdatesList";
 import { isShopifyConnected } from "@/lib/shopify/client";
@@ -31,8 +32,10 @@ async function Feeds({ searchParams }: { searchParams: Search }) {
   await connection();
   const params = await searchParams;
   const [{ items, failed }, reviews] = await Promise.all([platformUpdates(), updateReviews()]);
-  const important = items.filter((i) => i.relevant);
-  const other = items.filter((i) => !i.relevant);
+  const q = (typeof params.q === "string" ? params.q : "").trim().toLowerCase();
+  const found = q ? items.filter((i) => `${i.title} ${i.source}`.toLowerCase().includes(q)) : items;
+  const important = found.filter((i) => i.relevant);
+  const other = found.filter((i) => !i.relevant);
   const open = important.filter((i) => !reviews.has(updateKey(i))).length;
   const pages = Math.max(1, Math.ceil(important.length / PER_PAGE));
   const page = Math.min(pageFrom(params.page), pages);
@@ -41,6 +44,9 @@ async function Feeds({ searchParams }: { searchParams: Search }) {
     <>
       <ApiVersion />
       {failed.length ? <p className={styles.note}>Could not read right now: {failed.join(", ")}.</p> : null}
+      <div className={styles.searchRow}>
+        <SearchBar placeholder="Search updates" />
+      </div>
       <h2 className={styles.section}>
         Matters to our stores · {open ? `${open} to review` : "all reviewed"}
       </h2>

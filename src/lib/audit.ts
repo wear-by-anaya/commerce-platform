@@ -119,15 +119,19 @@ export type EventRow = { at: string; email: string; event: string; detail: strin
 
 export const EVENTS_PER_PAGE = 30;
 
-export async function activity(page = 1) {
+export async function activity(page = 1, q = "") {
   const sql = await db();
+  // Searches person, event, detail, device and place; % and _ match literally.
+  const like = `%${q.trim().slice(0, 80).replace(/[\\%_]/g, (c) => `\\${c}`)}%`;
   const [devices, events, count] = await Promise.all([
     sql`SELECT email, device, ip, place, first_seen::text AS first_seen, last_seen::text AS last_seen, last_path,
         last_seen > now() - interval '5 minutes' AS active
       FROM devices_seen ORDER BY last_seen DESC LIMIT 100`,
     sql`SELECT at::text AS at, email, event, detail, device, ip, place FROM audit_log
+      WHERE email ILIKE ${like} OR event ILIKE ${like} OR detail ILIKE ${like} OR device ILIKE ${like} OR place ILIKE ${like}
       ORDER BY at DESC LIMIT ${EVENTS_PER_PAGE} OFFSET ${(page - 1) * EVENTS_PER_PAGE}`,
-    sql`SELECT count(*)::int AS n FROM audit_log`,
+    sql`SELECT count(*)::int AS n FROM audit_log
+      WHERE email ILIKE ${like} OR event ILIKE ${like} OR detail ILIKE ${like} OR device ILIKE ${like} OR place ILIKE ${like}`,
   ]);
   return {
     devices: devices.map((r) => ({

@@ -24,8 +24,12 @@
 }
 
 .more summary {
-  min-height: 44px;
   padding: 12px 0;
+  line-height: 20px;
   font-weight: 600;
   cursor: pointer;
+}
+
+.searchRow {
+  margin-bottom: 16px;
 }

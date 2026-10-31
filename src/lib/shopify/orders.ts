@@ -15,8 +15,8 @@ export type OrderSummary = {
   shippingAddress: { name: string | null; city: string | null; country: string | null } | null;
 };
 
-const LIST_QUERY = `query Orders($first: Int, $last: Int, $after: String, $before: String) {
-  orders(first: $first, last: $last, after: $after, before: $before, sortKey: CREATED_AT, reverse: true) {
+const LIST_QUERY = `query Orders($first: Int, $last: Int, $after: String, $before: String, $query: String) {
+  orders(first: $first, last: $last, after: $after, before: $before, query: $query, sortKey: CREATED_AT, reverse: true) {
     pageInfo { hasNextPage hasPreviousPage startCursor endCursor }
     nodes {
       id name createdAt cancelledAt displayFinancialStatus displayFulfillmentStatus paymentGatewayNames
@@ -63,9 +63,13 @@ export async function orderStats() {
 export type PageInfo = { hasNextPage: boolean; hasPreviousPage: boolean; startCursor: string | null; endCursor: string | null };
 export type Cursor = { after?: string; before?: string };
 
+/** Free-text search for Shopify (order number, customer name, email). Quotes, colons and backslashes are dropped so a search can never become a filter. */
+export const searchText = (q: string | undefined) => (q ?? "").replace(/["\\:()]/g, " ").trim().slice(0, 80) || null;
+
 /** One page of orders, newest first. Shopify pages by cursor: "after" for the next page, "before" for the previous one. */
-export async function listOrders(size = 25, cursor: Cursor = {}) {
-  const vars = cursor.before ? { last: size, before: cursor.before } : { first: size, after: cursor.after ?? null };
+export async function listOrders(size = 25, cursor: Cursor = {}, q?: string) {
+  const page = cursor.before ? { last: size, before: cursor.before } : { first: size, after: cursor.after ?? null };
+  const vars = { ...page, query: searchText(q) };
   const { data, errors } = await shopifyQuery<{ orders: { nodes: OrderSummary[]; pageInfo: PageInfo } }>(LIST_QUERY, vars);
   return { orders: data?.orders.nodes ?? [], pageInfo: data?.orders.pageInfo ?? null, errors };
 }

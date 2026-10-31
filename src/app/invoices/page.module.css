@@ -2,3 +2,21 @@
   margin: 24px 0 12px;
   font-size: 1.05rem;
 }
+
+/* Section title with its search on the right; stacked on phones. */
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 24px 0 12px;
+}
+
+.sectionHead .section {
+  margin: 0;
+}
+
+.searchRow {
+  margin-bottom: 16px;
+}

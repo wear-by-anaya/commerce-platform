@@ -59,3 +59,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+.searchRow {
+  margin-bottom: 16px;
+}

@@ -14,14 +14,18 @@ export async function SavedInvoices({ params = {} }: { params?: Record<string, s
     return <EmptyState title="Database is not connected" description="Saved invoices need Neon. Connect it in Vercel (Storage), then redeploy." />;
   }
   const page = pageFrom(params.ipage);
+  const q = typeof params.iq === "string" ? params.iq : "";
   let result: Awaited<ReturnType<typeof listManualInvoices>>;
   try {
-    result = await listManualInvoices(page);
+    result = await listManualInvoices(page, q);
   } catch {
     return <EmptyState title="Saved invoices could not be loaded" description="The database did not answer. Reload the page in a minute." />;
   }
   const rows = result.items;
   const pages = Math.max(1, Math.ceil(result.total / INVOICES_PER_PAGE));
+  if (!rows.length && q) {
+    return <EmptyState title="No saved invoices match" description={`Nothing found for "${q}".`} />;
+  }
   if (!rows.length && page === 1) {
     return <EmptyState title="No saved invoices yet" description="Use New invoice for sales outside the online store." />;
   }

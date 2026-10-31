@@ -36,3 +36,16 @@
   color: var(--muted);
   font-size: var(--text-small);
 }
+
+.headRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 8px 0 12px;
+}
+
+.headRow .section {
+  margin: 0;
+}

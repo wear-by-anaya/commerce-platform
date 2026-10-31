@@ -16,6 +16,7 @@ export type IconName =
   | "settings"
   | "activity"
   | "external"
+  | "search"
   | "menu"
   | "close"
   | "chevronLeft"
@@ -117,6 +118,13 @@ const PATHS: Record<IconName, ReactNode> = {
       <path d="M14 4h6v6" />
       <path d="M20 4l-9 9" />
       <path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
+    </>
+  ),
+  // Magnifier: search.
+  search: (
+    <>
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="M20 20l-4.2-4.2" />
     </>
   ),
   menu: <path d="M4 7h16M4 12h16M4 17h16" />,

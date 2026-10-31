@@ -38,7 +38,8 @@ export async function RecentOrders({
   const after = path ? one(params[`${prefix}after`]) : undefined;
   const before = path ? one(params[`${prefix}before`]) : undefined;
   const page = pageFrom(params[`${prefix}p`]);
-  const { orders, pageInfo, errors } = await listOrders(first, { after, before });
+  const q = path ? one(params[`${prefix}q`]) : undefined;
+  const { orders, pageInfo, errors } = await listOrders(first, { after, before }, q);
   const keys = { [`${prefix}after`]: null, [`${prefix}before`]: null };
   const prevHref =
     path && pageInfo?.hasPreviousPage && pageInfo.startCursor && page > 1
@@ -58,7 +59,11 @@ export async function RecentOrders({
           <Pagination prevHref={prevHref} nextHref={nextHref} label={`Orders ${from}–${from + orders.length - 1}`} />
         </>
       ) : (
-        <EmptyState title="No orders yet" description="New orders show here as soon as they are placed." />
+        q ? (
+          <EmptyState title="No orders match" description={`Nothing found for "${q}". Try an order number, a name or an email.`} />
+        ) : (
+          <EmptyState title="No orders yet" description="New orders show here as soon as they are placed." />
+        )
       )}
     </>
   );

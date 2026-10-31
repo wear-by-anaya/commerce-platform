@@ -10,6 +10,7 @@ import { PageHeader } from "@/components/PageHeader";
 import buttons from "@/components/ui/Button.module.css";
 import form from "@/components/ui/Form.module.css";
 import { pageFrom, Pagination, withParams } from "@/components/ui/Pagination";
+import { SearchBar } from "@/components/ui/SearchBox";
 import { SkeletonCards, SkeletonTable } from "@/components/ui/Skeleton";
 import { isDatabaseConnected } from "@/lib/db";
 import { formatTotal } from "@/lib/invoice";
@@ -33,7 +34,7 @@ async function Profit({ searchParams }: { searchParams: Search }) {
     return <EmptyState title="Not connected yet" description="Profit needs both Shopify and the database (see Settings)." />;
   }
   const [{ rows, currency, rates, pageInfo, errors }, spend] = await Promise.all([
-    profitByOrder({ after: one(params.after), before: one(params.before) }),
+    profitByOrder({ after: one(params.after), before: one(params.before) }, one(params.q)),
     expenses(),
   ]);
   const from = (page - 1) * PROFIT_PAGE_SIZE + 1;
@@ -52,6 +53,9 @@ async function Profit({ searchParams }: { searchParams: Search }) {
         <MetricCard label="Shipping and other" value={money(sum("shipping") + sum("other"))} />
         <MetricCard label={`Profit · margin ${percent(revenue ? profit / revenue : null)}`} value={money(profit)} />
       </section>
+      <div className={styles.searchRow}>
+        <SearchBar placeholder="Search orders: number, name or email" />
+      </div>
       <p className={styles.notice}>
         Expenses, not taken off above: {monthly} a month. <Link href="/expenses">Expenses</Link>
         {noRates ? (

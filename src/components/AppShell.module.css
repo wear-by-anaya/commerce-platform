@@ -58,9 +58,9 @@
   display: none;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  padding: 0;
+  /* 28px icon + 8px padding each side = 44px tap target. */
+  padding: 8px;
+  line-height: 0;
   border: 0;
   background: transparent;
   color: var(--ink);
@@ -100,8 +100,7 @@
   grid-template-columns: 1.1rem 1fr auto;
   align-items: center;
   gap: 0.7rem;
-  min-height: 2.5rem;
-  padding: 0.5rem 0.7rem;
+  padding: 0.625rem 0.7rem;
   border-radius: var(--radius);
   text-decoration: none;
   color: var(--sidebar-ink);
@@ -197,9 +196,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  padding: 0;
+  /* 28px icon + 8px padding each side = 44px tap target. */
+  padding: 8px;
+  line-height: 0;
   border: 0;
   background: transparent;
   color: var(--accent);

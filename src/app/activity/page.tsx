@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/Badge";
 import form from "@/components/ui/Form.module.css";
 import { pageFrom, Pagination, withParams } from "@/components/ui/Pagination";
+import { SearchBar } from "@/components/ui/SearchBox";
 import { SkeletonCards, SkeletonTable } from "@/components/ui/Skeleton";
 import { activity, EVENTS_PER_PAGE } from "@/lib/audit";
 import { isDatabaseConnected } from "@/lib/db";
@@ -28,7 +29,8 @@ async function Activity({ searchParams }: { searchParams: Search }) {
   }
   const params = await searchParams;
   const page = pageFrom(params.page);
-  const { devices, events, total } = await activity(page);
+  const q = typeof params.q === "string" ? params.q : "";
+  const { devices, events, total } = await activity(page, q);
   const pages = Math.max(1, Math.ceil(total / EVENTS_PER_PAGE));
   const active = devices.filter((d) => d.active);
   return (
@@ -97,7 +99,10 @@ async function Activity({ searchParams }: { searchParams: Search }) {
       </section>
 
       <section>
-        <h2 className={styles.section}>History</h2>
+        <div className={styles.headRow}>
+          <h2 className={styles.section}>History</h2>
+          <SearchBar placeholder="Search history" />
+        </div>
         {events.length ? (
           <>
             <div className={table.wrap}>
@@ -137,7 +142,7 @@ async function Activity({ searchParams }: { searchParams: Search }) {
             />
           </>
         ) : (
-          <EmptyState title="No history yet" description="Sign-ins and saved changes show here." />
+          <EmptyState title={q ? "Nothing matches" : "No history yet"} description={q ? `Nothing found for "${q}".` : "Sign-ins and saved changes show here."} />
         )}
       </section>
     </div>

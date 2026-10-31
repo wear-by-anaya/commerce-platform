@@ -10,6 +10,7 @@ import table from "@/components/OrdersTable.module.css";
 import { PageHeader } from "@/components/PageHeader";
 import form from "@/components/ui/Form.module.css";
 import { pageFrom, Pagination, withParams } from "@/components/ui/Pagination";
+import { SearchBar } from "@/components/ui/SearchBox";
 import { SkeletonCards, SkeletonPanels } from "@/components/ui/Skeleton";
 import { isDatabaseConnected } from "@/lib/db";
 import { formatTotal } from "@/lib/invoice";
@@ -31,7 +32,9 @@ async function Expenses({ searchParams }: { searchParams: Search }) {
   if (!isDatabaseConnected()) {
     return <EmptyState title="Database is not connected" description="Expenses are saved in Neon. Connect it in Vercel (Storage), then redeploy." />;
   }
-  const { list: all, monthly, oneOffThisMonth } = await expenses();
+  const { list: everything, monthly, oneOffThisMonth } = await expenses();
+  const q = (typeof params.q === "string" ? params.q : "").trim().toLowerCase();
+  const all = q ? everything.filter((e) => `${e.name} ${e.category} ${e.note}`.toLowerCase().includes(q)) : everything;
   const pages = Math.max(1, Math.ceil(all.length / PER_PAGE));
   const page = Math.min(pageFrom(params.page), pages);
   const list = all.slice((page - 1) * PER_PAGE, page * PER_PAGE);
@@ -51,6 +54,9 @@ async function Expenses({ searchParams }: { searchParams: Search }) {
         <ExpenseForm categories={EXPENSE_CATEGORIES} currencies={COST_CURRENCIES} today={today} />
       </section>
 
+      <div className={styles.searchRow}>
+        <SearchBar placeholder="Search expenses" />
+      </div>
       {list.length ? (
         <>
           <div className={table.wrap}>
@@ -96,7 +102,11 @@ async function Expenses({ searchParams }: { searchParams: Search }) {
           />
         </>
       ) : (
-        <EmptyState title="No expenses yet" description="Add the first one above, e.g. the Shopify plan." />
+        q ? (
+          <EmptyState title="No expenses match" description={`Nothing found for "${q}".`} />
+        ) : (
+          <EmptyState title="No expenses yet" description="Add the first one above, e.g. the Shopify plan." />
+        )
       )}
     </div>
   );

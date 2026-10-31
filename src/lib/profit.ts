@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/session";
 import { shopifyQuery } from "@/lib/shopify/client";
-import type { Cursor, PageInfo } from "@/lib/shopify/orders";
+import { searchText, type Cursor, type PageInfo } from "@/lib/shopify/orders";
 
 /** Supplier discount when a brand has no row of its own (default from the Afrozeh estimate, 31 Oct: brand price less 15%). */
 export const DEFAULT_DISCOUNT = 15;
@@ -32,8 +32,8 @@ type ProfitOrder = {
 };
 
 // 25 orders x 20 lines keeps the query under Shopify's cost limit.
-const QUERY = `query ProfitOrders($first: Int, $last: Int, $after: String, $before: String) {
-  orders(first: $first, last: $last, after: $after, before: $before, sortKey: CREATED_AT, reverse: true) {
+const QUERY = `query ProfitOrders($first: Int, $last: Int, $after: String, $before: String, $query: String) {
+  orders(first: $first, last: $last, after: $after, before: $before, query: $query, sortKey: CREATED_AT, reverse: true) {
     pageInfo { hasNextPage hasPreviousPage startCursor endCursor }
     nodes {
       id name createdAt cancelledAt
@@ -133,9 +133,10 @@ export function unitShipping(line: ProfitLineNode, country: string, settings: Co
 
 export const PROFIT_PAGE_SIZE = 25;
 
-export async function profitByOrder(cursor: Cursor = {}) {
+export async function profitByOrder(cursor: Cursor = {}, q?: string) {
   await requireUser();
-  const vars = cursor.before ? { last: PROFIT_PAGE_SIZE, before: cursor.before } : { first: PROFIT_PAGE_SIZE, after: cursor.after ?? null };
+  const page = cursor.before ? { last: PROFIT_PAGE_SIZE, before: cursor.before } : { first: PROFIT_PAGE_SIZE, after: cursor.after ?? null };
+  const vars = { ...page, query: searchText(q) };
   const [{ data, errors }, settings] = await Promise.all([
     shopifyQuery<{ orders: { nodes: ProfitOrder[]; pageInfo: PageInfo } }>(QUERY, vars),
     loadCostSettings(),

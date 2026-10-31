@@ -103,13 +103,18 @@ export async function getManualInvoice(id: number) {
 export const INVOICES_PER_PAGE = 20;
 
 /** One page of saved invoices, newest first, with the total count for the page controls. */
-export async function listManualInvoices(page = 1) {
+export async function listManualInvoices(page = 1, q = "") {
   await requireUser();
   const sql = await db();
   const offset = (page - 1) * INVOICES_PER_PAGE;
+  // Searches number, customer, items and note; % and _ are escaped so they match literally.
+  const like = `%${q.trim().slice(0, 80).replace(/[\\%_]/g, (c) => `\\${c}`)}%`;
   const [rows, count] = await Promise.all([
-    sql`SELECT * FROM manual_invoices ORDER BY id DESC LIMIT ${INVOICES_PER_PAGE} OFFSET ${offset}`,
-    sql`SELECT count(*)::int AS n FROM manual_invoices`,
+    sql`SELECT * FROM manual_invoices
+      WHERE ${like} = '%%' OR number ILIKE ${like} OR bill_to ILIKE ${like} OR lines::text ILIKE ${like} OR notes ILIKE ${like}
+      ORDER BY id DESC LIMIT ${INVOICES_PER_PAGE} OFFSET ${offset}`,
+    sql`SELECT count(*)::int AS n FROM manual_invoices
+      WHERE ${like} = '%%' OR number ILIKE ${like} OR bill_to ILIKE ${like} OR lines::text ILIKE ${like} OR notes ILIKE ${like}`,
   ]);
   const items = (rows as Row[]).map((row) => {
     const invoice = toInvoice(row);

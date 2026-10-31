@@ -1,0 +1,94 @@
+.box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 420px;
+}
+
+.icon {
+  position: absolute;
+  left: 12px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 76px 10px 40px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+
+/* Our own clear button replaces the browser's. */
+.input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.input::placeholder {
+  color: var(--muted);
+}
+
+.input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.clear {
+  position: absolute;
+  right: 4px;
+  display: inline-grid;
+  place-items: center;
+  padding: 10px;
+  line-height: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.clear:hover {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+.spinner {
+  position: absolute;
+  right: 44px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2s;
+  }
+}
+
+.placeholder {
+  width: 100%;
+  max-width: 420px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}

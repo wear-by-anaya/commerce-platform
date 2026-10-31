@@ -10,6 +10,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/Badge";
 import form from "@/components/ui/Form.module.css";
 import { pageFrom, Pagination, withParams } from "@/components/ui/Pagination";
+import { SearchBar } from "@/components/ui/SearchBox";
 import { SkeletonCards, SkeletonTable } from "@/components/ui/Skeleton";
 import { isDatabaseConnected } from "@/lib/db";
 import { designers, RECHECK_DAYS } from "@/lib/designers";
@@ -41,7 +42,9 @@ async function Designers({ searchParams }: { searchParams: Search }) {
   const { rows: all } = await designers();
   const partners = all.filter((r) => r.partner);
   const recheck = all.filter((r) => r.needsRecheck);
-  const rows = view === "partners" ? partners : view === "recheck" ? recheck : all;
+  const q = (typeof params.q === "string" ? params.q : "").trim().toLowerCase();
+  const viewRows = view === "partners" ? partners : view === "recheck" ? recheck : all;
+  const rows = q ? viewRows.filter((r) => `${r.name} ${r.site}`.toLowerCase().includes(q)) : [...viewRows];
   // Partners first, then by name.
   rows.sort((a, b) => Number(b.partner) - Number(a.partner) || a.name.localeCompare(b.name));
   const pages = Math.max(1, Math.ceil(rows.length / PER_PAGE));
@@ -57,6 +60,7 @@ async function Designers({ searchParams }: { searchParams: Search }) {
         <MetricCard label="Pieces in stock at the brands" value={inStock.toLocaleString("en-GB")} />
       </section>
 
+      <div className={styles.toolbar}>
       <nav className={styles.tabs} aria-label="Show">
         {VIEWS.map((v) => (
           <Link
@@ -70,6 +74,8 @@ async function Designers({ searchParams }: { searchParams: Search }) {
           </Link>
         ))}
       </nav>
+        <SearchBar placeholder="Search designers" />
+      </div>
 
       {shown.length ? (
         <>
@@ -138,8 +144,8 @@ async function Designers({ searchParams }: { searchParams: Search }) {
         </>
       ) : (
         <EmptyState
-          title={view === "partners" ? "No partners marked yet" : "Nothing needs a recheck"}
-          description={view === "partners" ? "Tick Partner on a designer under All." : "Every designer was checked in the last week."}
+          title={q ? "No designers match" : view === "partners" ? "No partners marked yet" : "Nothing needs a recheck"}
+          description={q ? `Nothing found for "${q}".` : view === "partners" ? "Tick Partner on a designer under All." : "Every designer was checked in the last week."}
         />
       )}
     </div>

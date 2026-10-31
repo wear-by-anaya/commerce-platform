@@ -4,6 +4,7 @@ import { RecentOrders } from "@/components/OrdersTable";
 import { PageHeader } from "@/components/PageHeader";
 import { SavedInvoices } from "@/components/SavedInvoices";
 import buttons from "@/components/ui/Button.module.css";
+import { SearchBar } from "@/components/ui/SearchBox";
 import { SkeletonTable } from "@/components/ui/Skeleton";
 import styles from "./page.module.css";
 
@@ -35,11 +36,17 @@ export default function Page({ searchParams }: { searchParams: Search }) {
           </>
         }
       />
-      <h2 className={styles.section}>Saved invoices</h2>
+      <div className={styles.sectionHead}>
+        <h2 className={styles.section}>Saved invoices</h2>
+        <SearchBar placeholder="Search saved invoices" param="iq" resetParams={["ipage"]} />
+      </div>
       <Suspense fallback={<SkeletonTable rows={3} cols={5} />}>
         <Saved searchParams={searchParams} />
       </Suspense>
-      <h2 className={styles.section}>From store orders</h2>
+      <div className={styles.sectionHead}>
+        <h2 className={styles.section}>From store orders</h2>
+        <SearchBar placeholder="Search orders: number, name or email" param="o_q" resetParams={["o_after", "o_before", "o_p"]} />
+      </div>
       <Suspense fallback={<SkeletonTable rows={4} cols={7} />}>
         <FromOrders searchParams={searchParams} />
       </Suspense>
