@@ -28,6 +28,30 @@ async function migrate(sql: Sql) {
     created_by text NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now()
   )`;
+  // Profit tracker. Amounts are in the shop currency (PKR) unless a currency column says otherwise.
+  await sql`CREATE TABLE IF NOT EXISTS brand_discounts (
+    brand text PRIMARY KEY,
+    percent numeric NOT NULL
+  )`;
+  await sql`CREATE TABLE IF NOT EXISTS product_costs (
+    sku text PRIMARY KEY,
+    cost numeric NOT NULL,
+    updated_at timestamptz NOT NULL DEFAULT now()
+  )`;
+  await sql`CREATE TABLE IF NOT EXISTS order_costs (
+    order_id text PRIMARY KEY,
+    shipping_cost numeric NOT NULL DEFAULT 0,
+    other_cost numeric NOT NULL DEFAULT 0,
+    updated_at timestamptz NOT NULL DEFAULT now()
+  )`;
+  await sql`CREATE TABLE IF NOT EXISTS running_costs (
+    id serial PRIMARY KEY,
+    name text NOT NULL,
+    amount numeric NOT NULL,
+    currency text NOT NULL,
+    every text NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now()
+  )`;
   return sql;
 }
 

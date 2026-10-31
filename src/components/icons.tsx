@@ -9,11 +9,18 @@ type IconName =
   | "reviews"
   | "settings"
   | "bell"
+  | "chart"
   | "menu"
   | "close"
   | "info";
 
 const PATHS: Record<IconName, ReactNode> = {
+  chart: (
+    <>
+      <path d="M4 20h16" />
+      <path d="M7 16v-5M12 16V7M17 16v-8" />
+    </>
+  ),
   bell: (
     <>
       <path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4l2-2z" />
