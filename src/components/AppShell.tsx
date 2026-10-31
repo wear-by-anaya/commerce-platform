@@ -9,7 +9,11 @@ import { STORE_BRAND } from "@/lib/config";
 import { NAV_GROUPS } from "@/lib/nav";
 import styles from "./AppShell.module.css";
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+/** Printable documents show without the sidebar; forms keep it. */
+const isDocument = (path: string) => path === "/invoices/sample" || /^\/invoices\/(manual\/)?\d+$/.test(path);
+
+export function AppShell({ children, connected }: { children: React.ReactNode; connected: boolean }) {
+  const statusText = connected ? "Shopify connected" : "Shopify not connected";
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const panelId = useId();
@@ -28,7 +32,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     };
   }, [open]);
 
-  if (pathname === "/login" || pathname.startsWith("/invoices/")) return <>{children}</>;
+  if (pathname === "/login" || isDocument(pathname)) return <>{children}</>;
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -93,6 +97,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                       >
                         <Icon name={item.icon} />
                         <span>{item.label}</span>
+                        {item.planned ? <Badge>planned</Badge> : null}
                         {showBadge ? (
                           <Badge tone={item.badgeTone ?? "neutral"}>
                             {item.badgeCount}
@@ -108,8 +113,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </nav>
 
         <div className={styles.footer}>
-          <span className={styles.dot} aria-hidden="true" />
-          <span>Connections offline</span>
+          <span className={`${styles.dot} ${connected ? styles.dotOn : ""}`} aria-hidden="true" />
+          <span>{statusText}</span>
           <Link href="/api/auth/signout" prefetch={false}>Sign out</Link>
         </div>
       </aside>
@@ -117,7 +122,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className={styles.workspace}>
         <header className={styles.topDesktop}>
           <p className={styles.topHint}>Internal workspace</p>
-          <p className={styles.topStatus}>Connections offline</p>
+          <p className={styles.topStatus}>{statusText}</p>
         </header>
         <main className={styles.main}>{children}</main>
       </div>

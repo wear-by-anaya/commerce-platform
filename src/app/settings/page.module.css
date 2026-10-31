@@ -1,0 +1,44 @@
+.panel {
+  margin-bottom: 16px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.title {
+  margin: 0 0 16px;
+  font-size: 1.1rem;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.sub {
+  display: block;
+  color: var(--muted);
+  font-size: var(--text-small);
+}
+
+.line {
+  margin: 0 0 4px;
+}
+
+.note {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: var(--text-small);
+}

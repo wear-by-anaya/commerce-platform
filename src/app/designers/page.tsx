@@ -5,7 +5,7 @@ export default function Page() {
   return (
     <>
       <PageHeader title="Designers" description="Designer sources and mapping health for this store." />
-      <EmptyState title="No designers loaded" description="Designer directories will arrive with source adapters." />
+      <EmptyState title="Not built yet" description="Planned: each brand with its products, stock and latest new pieces." />
     </>
   );
 }

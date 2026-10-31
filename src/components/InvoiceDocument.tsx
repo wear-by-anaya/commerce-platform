@@ -114,6 +114,8 @@ export function InvoiceDocument({ invoice }: { invoice: InvoiceData }) {
         </section>
       ) : null}
 
+      {invoice.notes ? <p className={styles.notes}>{invoice.notes}</p> : null}
+
       <footer className={styles.legal}>{SELLER.legal}</footer>
     </article>
   );

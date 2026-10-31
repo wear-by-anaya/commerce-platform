@@ -25,6 +25,40 @@ const LIST_QUERY = `query Orders($first: Int!) {
   }
 }`;
 
+const STATS_QUERY = `query Stats($recent: String!) {
+  recent: orders(first: 250, query: $recent) {
+    nodes { createdAt cancelledAt currentTotalPriceSet { shopMoney { amount currencyCode } } }
+  }
+  open: orders(first: 250, query: "status:open AND fulfillment_status:unfulfilled") {
+    nodes { id cancelledAt }
+  }
+}`;
+
+type StatsResult = {
+  recent: { nodes: { createdAt: string; cancelledAt: string | null; currentTotalPriceSet: { shopMoney: { amount: string; currencyCode: string } } }[] };
+  open: { nodes: { id: string; cancelledAt: string | null }[] };
+};
+
+/** Dashboard figures in the shop's own currency; cancelled orders are left out. */
+export async function orderStats() {
+  const karachiDay = (date: Date) => date.toLocaleDateString("en-CA", { timeZone: "Asia/Karachi" });
+  const today = karachiDay(new Date());
+  const weekStart = karachiDay(new Date(Date.now() - 6 * 24 * 60 * 60 * 1000));
+  const { data, errors } = await shopifyQuery<StatsResult>(STATS_QUERY, { recent: `created_at:>=${weekStart}` });
+  const live = (data?.recent.nodes ?? []).filter((o) => !o.cancelledAt);
+  const todays = live.filter((o) => karachiDay(new Date(o.createdAt)) === today);
+  const sum = (list: typeof live) => list.reduce((total, o) => total + Number(o.currentTotalPriceSet.shopMoney.amount), 0);
+  return {
+    currency: data?.recent.nodes[0]?.currentTotalPriceSet.shopMoney.currencyCode ?? "PKR",
+    ordersToday: todays.length,
+    revenueToday: sum(todays),
+    ordersWeek: live.length,
+    revenueWeek: sum(live),
+    openOrders: (data?.open.nodes ?? []).filter((o) => !o.cancelledAt).length,
+    errors,
+  };
+}
+
 export async function listOrders(first = 50) {
   const { data, errors } = await shopifyQuery<{ orders: { nodes: OrderSummary[] } }>(LIST_QUERY, { first });
   return { orders: data?.orders.nodes ?? [], errors };

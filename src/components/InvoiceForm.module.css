@@ -1,0 +1,216 @@
+.form {
+  display: grid;
+  gap: 16px;
+  max-width: 960px;
+}
+
+.panel {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.heading {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.grid2,
+.grid3 {
+  display: grid;
+  gap: 16px;
+}
+
+.field {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  font-size: var(--text-small);
+  font-weight: 600;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.field small {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: var(--text-secondary);
+}
+
+.check input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+.lineHead {
+  display: none;
+}
+
+.lines {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.line {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+  padding: 16px 48px 16px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.line > :nth-child(1),
+.line > :nth-child(2) {
+  grid-column: 1 / -1;
+}
+
+.amount {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-weight: 700;
+  text-align: right;
+}
+
+.remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.remove:hover {
+  background: var(--accent-soft);
+  color: var(--danger);
+}
+
+.totals {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-content: start;
+  align-items: baseline;
+  gap: 8px 24px;
+  margin: 0;
+}
+
+.totals dt,
+.totals dd {
+  margin: 0;
+}
+
+.totals dd {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.grand {
+  padding-top: 8px;
+  border-top: 1px solid var(--ink);
+  font-weight: 700;
+}
+
+.error {
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius);
+  color: var(--danger);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.right {
+  text-align: right;
+}
+
+@media (min-width: 720px) {
+  .grid2 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .grid3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .lineHead,
+  .line {
+    display: grid;
+    grid-template-columns: 2fr 2fr 72px 120px 120px 36px;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .lineHead {
+    color: var(--muted);
+    font-size: var(--text-small);
+    font-weight: 600;
+  }
+
+  .line {
+    padding: 0;
+    border: 0;
+  }
+
+  .line > :nth-child(1),
+  .line > :nth-child(2),
+  .amount {
+    grid-column: auto;
+  }
+
+  .mobileLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .remove {
+    position: static;
+  }
+}

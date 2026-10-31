@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { EmptyState } from "@/components/EmptyState";
 import { InvoiceDocument } from "@/components/InvoiceDocument";
 import { PrintButton } from "@/components/PrintButton";
+import buttons from "@/components/ui/Button.module.css";
 import { isShopifyConnected } from "@/lib/shopify/client";
 import { orderInvoice } from "@/lib/shopify/orders";
+import styles from "../toolbar.module.css";
 
 export const metadata: Metadata = { title: "Invoice" };
 
@@ -27,7 +30,9 @@ async function OrderInvoice({ params }: { params: Promise<{ id: string }> }) {
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "flex-end", maxWidth: "210mm", margin: "0 auto", padding: 16 }} data-print-hide>
+      <div className={styles.toolbar} data-print-hide>
+        <Link href="/invoices" className={buttons.secondary}>Back</Link>
+        <span className={styles.spacer} />
         <PrintButton />
       </div>
       <Suspense fallback={<p>Loading invoice…</p>}>

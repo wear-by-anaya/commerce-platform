@@ -8,7 +8,7 @@ import { formatDate, listOrders, type OrderSummary } from "@/lib/shopify/orders"
 import styles from "./OrdersTable.module.css";
 
 /** Latest orders from Shopify, or an empty state when the store is not connected. */
-export async function RecentOrders() {
+export async function RecentOrders({ first = 50 }: { first?: number }) {
   await connection();
   if (!isShopifyConnected()) {
     return (
@@ -18,7 +18,7 @@ export async function RecentOrders() {
       />
     );
   }
-  const { orders, errors } = await listOrders();
+  const { orders, errors } = await listOrders(first);
   return (
     <>
       {errors.length ? <p className={styles.notice}>Some order details could not be read: {errors[0]}</p> : null}

@@ -33,6 +33,8 @@ export type InvoiceData = {
   discountAmount?: number;
   shipping?: number;
   currency: string;
+  /** Short note printed under the totals. */
+  notes?: string;
 };
 
 export function lineAmount(line: InvoiceLine) {

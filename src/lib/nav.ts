@@ -4,6 +4,8 @@ export type NavItem = {
   icon: "dashboard" | "orders" | "inventory" | "designers" | "sync" | "reviews" | "settings";
   badgeCount?: number;
   badgeTone?: "neutral" | "accent" | "warning";
+  /** Page not built yet; shown with a "planned" badge. */
+  planned?: boolean;
 };
 
 export type NavGroup = {
@@ -21,15 +23,15 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: "/orders", label: "Orders", icon: "orders" },
       { href: "/invoices", label: "Invoices", icon: "orders" },
-      { href: "/inventory", label: "Inventory", icon: "inventory" },
-      { href: "/designers", label: "Designers", icon: "designers" },
+      { href: "/inventory", label: "Inventory", icon: "inventory", planned: true },
+      { href: "/designers", label: "Designers", icon: "designers", planned: true },
     ],
   },
   {
     label: "Operations",
     items: [
-      { href: "/sync-runs", label: "Sync runs", icon: "sync" },
-      { href: "/reviews", label: "Reviews", icon: "reviews" },
+      { href: "/sync-runs", label: "Sync runs", icon: "sync", planned: true },
+      { href: "/reviews", label: "Reviews", icon: "reviews", planned: true },
     ],
   },
   {

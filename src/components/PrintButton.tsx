@@ -1,10 +1,10 @@
 "use client";
 
-import styles from "./PrintButton.module.css";
+import buttons from "./ui/Button.module.css";
 
 export function PrintButton() {
   return (
-    <button type="button" className={styles.button} onClick={() => window.print()}>
+    <button type="button" className={buttons.button} onClick={() => window.print()}>
       Print or save as PDF
     </button>
   );
