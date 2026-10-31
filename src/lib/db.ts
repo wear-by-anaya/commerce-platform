@@ -68,6 +68,29 @@ async function migrate(sql: Sql) {
     hits integer NOT NULL DEFAULT 0,
     PRIMARY KEY (bucket, window_start)
   )`;
+  // Audit: devices people use (one row per person + device) and a history of sign-ins and changes.
+  await sql`CREATE TABLE IF NOT EXISTS devices_seen (
+    email text NOT NULL,
+    device_key text NOT NULL,
+    device text NOT NULL,
+    ip text NOT NULL DEFAULT '',
+    place text NOT NULL DEFAULT '',
+    first_seen timestamptz NOT NULL DEFAULT now(),
+    last_seen timestamptz NOT NULL DEFAULT now(),
+    last_path text NOT NULL DEFAULT '',
+    PRIMARY KEY (email, device_key)
+  )`;
+  await sql`CREATE TABLE IF NOT EXISTS audit_log (
+    id bigserial PRIMARY KEY,
+    at timestamptz NOT NULL DEFAULT now(),
+    email text NOT NULL,
+    event text NOT NULL,
+    detail text NOT NULL DEFAULT '',
+    device text NOT NULL DEFAULT '',
+    ip text NOT NULL DEFAULT '',
+    place text NOT NULL DEFAULT ''
+  )`;
+  await sql`CREATE INDEX IF NOT EXISTS audit_log_at ON audit_log (at DESC)`;
   await sql`CREATE TABLE IF NOT EXISTS update_reviews (
     item_key text PRIMARY KEY,
     reviewed_by text NOT NULL,

@@ -1,3 +1,5 @@
+import { after } from "next/server";
+import { logEvent, visitor } from "@/lib/audit";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/session";
 
@@ -7,6 +9,8 @@ export const LIMITS = {
   upload: { max: 10, seconds: 600 }, // product cost sheet uploads
   download: { max: 30, seconds: 3600 }, // sheet downloads (each reads Shopify)
 } as const;
+
+const EVENT = { save: "saved", upload: "uploaded cost sheet", download: "downloaded cost sheet" } as const;
 
 export class RateLimitError extends Error {
   constructor(public readonly retryInSeconds: number) {
@@ -38,6 +42,10 @@ export async function limitFor(kind: keyof typeof LIMITS): Promise<string | null
   const user = await requireUser();
   try {
     await rateLimit(kind, user.email ?? "unknown");
+    // History line for every change: "saved" on the page it came from (audit log).
+    const email = user.email ?? "unknown";
+    const v = await visitor();
+    after(() => logEvent(email, EVENT[kind], v.path));
     return null;
   } catch (error) {
     if (error instanceof RateLimitError) return error.message;

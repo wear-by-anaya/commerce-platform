@@ -14,9 +14,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: { signIn: "/login", error: "/login" },
   session: { strategy: "jwt", maxAge: 60 * 60 * 24 * 7 },
   callbacks: {
-    signIn({ profile }) {
+    async signIn({ profile }) {
       const email = profile?.email?.toLowerCase();
-      return Boolean(email && profile?.email_verified && allowedEmails().includes(email));
+      const allowed = Boolean(email && profile?.email_verified && allowedEmails().includes(email));
+      // Loaded only here, so the proxy does not pull in the database driver.
+      const { logEvent } = await import("@/lib/audit");
+      await logEvent(email ?? "unknown", allowed ? "signed in" : "sign-in refused", allowed ? "" : "email not on the team list");
+      return allowed;
     },
     authorized({ auth: session }) {
       return Boolean(session?.user);
