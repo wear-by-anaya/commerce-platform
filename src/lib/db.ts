@@ -91,6 +91,19 @@ async function migrate(sql: Sql) {
     place text NOT NULL DEFAULT ''
   )`;
   await sql`CREATE INDEX IF NOT EXISTS audit_log_at ON audit_log (at DESC)`;
+  // Designers: last check of each brand's own website, and which brands are partners (private, not in the code).
+  await sql`CREATE TABLE IF NOT EXISTS brand_scans (
+    slug text PRIMARY KEY,
+    checked_at timestamptz NOT NULL DEFAULT now(),
+    products integer NOT NULL DEFAULT 0,
+    in_stock integer NOT NULL DEFAULT 0,
+    newest_at timestamptz,
+    error text NOT NULL DEFAULT ''
+  )`;
+  await sql`CREATE TABLE IF NOT EXISTS brand_partners (
+    slug text PRIMARY KEY,
+    since timestamptz NOT NULL DEFAULT now()
+  )`;
   await sql`CREATE TABLE IF NOT EXISTS update_reviews (
     item_key text PRIMARY KEY,
     reviewed_by text NOT NULL,
