@@ -22,7 +22,10 @@ async function Metrics() {
     <section className={styles.metrics} aria-label="Key figures">
       <MetricCard label="Orders today" value={String(stats.ordersToday)} />
       <MetricCard label="Sales today" value={money(stats.revenueToday)} />
-      <MetricCard label="Sales, last 7 days" value={`${money(stats.revenueWeek)} (${stats.ordersWeek} ${stats.ordersWeek === 1 ? "order" : "orders"})`} />
+      <MetricCard
+        label={`Sales, last 7 days · ${stats.ordersWeek} ${stats.ordersWeek === 1 ? "order" : "orders"}`}
+        value={money(stats.revenueWeek)}
+      />
       <MetricCard label="Orders to send" value={String(stats.openOrders)} />
     </section>
   );
