@@ -1,5 +1,6 @@
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { SkeletonPanels } from "@/components/ui/Skeleton";
 import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/Badge";
 import { SELLER } from "@/lib/invoice";
@@ -48,7 +49,7 @@ export default function Page() {
   return (
     <>
       <PageHeader title="Settings" description="What this dashboard is connected to." />
-      <Suspense fallback={<p>Loading…</p>}>
+      <Suspense fallback={<SkeletonPanels count={2} />}>
         <Connections />
       </Suspense>
     </>

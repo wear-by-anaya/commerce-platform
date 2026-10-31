@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { SkeletonCards, SkeletonList, SkeletonTable } from "@/components/ui/Skeleton";
 import { MetricCard } from "@/components/MetricCard";
 import { RecentOrders } from "@/components/OrdersTable";
 import { PageHeader } from "@/components/PageHeader";
@@ -9,7 +10,7 @@ import buttons from "@/components/ui/Button.module.css";
 import { formatTotal } from "@/lib/invoice";
 import { isShopifyConnected } from "@/lib/shopify/client";
 import { orderStats } from "@/lib/shopify/orders";
-import { platformUpdates } from "@/lib/updates";
+import { platformUpdates, updateKey, updateReviews } from "@/lib/updates";
 import styles from "./page.module.css";
 
 async function Metrics() {
@@ -33,14 +34,15 @@ async function Metrics() {
 
 async function LatestUpdates() {
   await connection();
-  const { items } = await platformUpdates(14);
-  const important = items.filter((i) => i.relevant).slice(0, 3);
-  if (!important.length) return null;
-  const fresh = important.filter((i) => i.isNew).length;
+  const [{ items }, reviews] = await Promise.all([platformUpdates(14), updateReviews()]);
+  const open = items.filter((i) => i.relevant && !reviews.has(updateKey(i)));
+  if (!open.length) return null;
+  const fresh = open.filter((i) => i.isNew).length;
+  const important = open.slice(0, 3);
   return (
     <section>
       <div className={styles.sectionHead}>
-        <h2 className={styles.section}>Shopify and Google updates{fresh ? ` · ${fresh} new` : ""}</h2>
+        <h2 className={styles.section}>Shopify and Google updates to review · {open.length}{fresh ? ` (${fresh} new)` : ""}</h2>
         <Link href="/updates">See all</Link>
       </div>
       <UpdatesList items={important} />
@@ -56,13 +58,13 @@ export default function HomePage() {
         description="Today's orders and sales, Pakistan time. Cancelled orders are not counted."
         actions={<Link href="/orders" className={buttons.secondary}>All orders</Link>}
       />
-      <Suspense fallback={<p>Loading figures…</p>}>
+      <Suspense fallback={<SkeletonCards />}>
         <Metrics />
       </Suspense>
-      <Suspense fallback={<p>Loading orders…</p>}>
+      <Suspense fallback={<SkeletonTable rows={5} cols={7} />}>
         <RecentOrders first={5} />
       </Suspense>
-      <Suspense fallback={null}>
+      <Suspense fallback={<SkeletonList rows={3} />}>
         <LatestUpdates />
       </Suspense>
     </div>

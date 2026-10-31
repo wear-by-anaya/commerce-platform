@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { SkeletonDocument } from "@/components/ui/Skeleton";
 import { DeleteInvoiceButton } from "@/components/DeleteInvoiceButton";
 import { EmptyState } from "@/components/EmptyState";
 import { InvoiceDocument } from "@/components/InvoiceDocument";
@@ -35,7 +36,7 @@ async function SavedInvoice({ params }: { params: Promise<{ id: string }> }) {
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
   return (
-    <Suspense fallback={<p>Loading invoice…</p>}>
+    <Suspense fallback={<SkeletonDocument />}>
       <SavedInvoice params={params} />
     </Suspense>
   );

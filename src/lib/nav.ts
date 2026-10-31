@@ -1,7 +1,7 @@
 export type NavItem = {
   href: string;
   label: string;
-  icon: "dashboard" | "orders" | "inventory" | "designers" | "sync" | "reviews" | "settings" | "bell" | "chart";
+  icon: "dashboard" | "orders" | "inventory" | "designers" | "sync" | "reviews" | "settings" | "bell" | "chart" | "wallet";
   badgeCount?: number;
   badgeTone?: "neutral" | "accent" | "warning";
   /** Page not built yet; shown with a "planned" badge. */
@@ -28,6 +28,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: "/invoices", label: "Invoices", icon: "orders" },
       { href: "/profit", label: "Profit", icon: "chart" },
       { href: "/costs", label: "Costs", icon: "inventory" },
+      { href: "/expenses", label: "Expenses", icon: "wallet" },
       { href: "/inventory", label: "Inventory", icon: "inventory", planned: true },
       { href: "/designers", label: "Designers", icon: "designers", planned: true },
     ],

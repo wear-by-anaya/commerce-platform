@@ -52,6 +52,22 @@ async function migrate(sql: Sql) {
     every text NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now()
   )`;
+  // 31 Oct: expenses ledger (category, date paid, note) and per-product shipping.
+  await sql`ALTER TABLE running_costs ADD COLUMN IF NOT EXISTS category text NOT NULL DEFAULT 'Other'`;
+  await sql`ALTER TABLE running_costs ADD COLUMN IF NOT EXISTS paid_on date`;
+  await sql`ALTER TABLE running_costs ADD COLUMN IF NOT EXISTS note text NOT NULL DEFAULT ''`;
+  await sql`ALTER TABLE product_costs ADD COLUMN IF NOT EXISTS shipping numeric`;
+  await sql`ALTER TABLE product_costs ALTER COLUMN cost DROP NOT NULL`;
+  await sql`CREATE TABLE IF NOT EXISTS settings (
+    key text PRIMARY KEY,
+    value text NOT NULL
+  )`;
+  await sql`CREATE TABLE IF NOT EXISTS update_reviews (
+    item_key text PRIMARY KEY,
+    reviewed_by text NOT NULL,
+    reviewed_at timestamptz NOT NULL DEFAULT now(),
+    note text NOT NULL DEFAULT ''
+  )`;
   return sql;
 }
 

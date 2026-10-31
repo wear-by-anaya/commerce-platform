@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { SkeletonDocument } from "@/components/ui/Skeleton";
 import { EmptyState } from "@/components/EmptyState";
 import { InvoiceDocument } from "@/components/InvoiceDocument";
 import { PrintButton } from "@/components/PrintButton";
@@ -35,7 +36,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
         <span className={styles.spacer} />
         <PrintButton />
       </div>
-      <Suspense fallback={<p>Loading invoice…</p>}>
+      <Suspense fallback={<SkeletonDocument />}>
         <OrderInvoice params={params} />
       </Suspense>
     </>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { SkeletonTable } from "@/components/ui/Skeleton";
 import { RecentOrders } from "@/components/OrdersTable";
 import { PageHeader } from "@/components/PageHeader";
 import { SavedInvoices } from "@/components/SavedInvoices";
@@ -20,11 +21,11 @@ export default function Page() {
         }
       />
       <h2 className={styles.section}>Saved invoices</h2>
-      <Suspense fallback={<p>Loading invoices…</p>}>
+      <Suspense fallback={<SkeletonTable rows={3} cols={5} />}>
         <SavedInvoices />
       </Suspense>
       <h2 className={styles.section}>From store orders</h2>
-      <Suspense fallback={<p>Loading orders…</p>}>
+      <Suspense fallback={<SkeletonTable rows={4} cols={7} />}>
         <RecentOrders />
       </Suspense>
     </>

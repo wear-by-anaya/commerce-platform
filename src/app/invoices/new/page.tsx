@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { SkeletonPanels } from "@/components/ui/Skeleton";
 import { EmptyState } from "@/components/EmptyState";
 import { InvoiceForm } from "@/components/InvoiceForm";
 import { PageHeader } from "@/components/PageHeader";
@@ -24,7 +25,7 @@ export default function Page() {
   return (
     <>
       <PageHeader title="New invoice" description="For sales and work outside the online store. Numbers are given automatically." />
-      <Suspense fallback={<p>Loading…</p>}>
+      <Suspense fallback={<SkeletonPanels count={3} />}>
         <Form />
       </Suspense>
     </>

@@ -1,17 +1,26 @@
-import { productCostSheet } from "@/lib/profit";
 import { STORE_SLUG } from "@/lib/config";
+import { productCostSheet } from "@/lib/profit";
 
-const cell = (value: string | number) => {
-  const text = String(value);
+const cell = (value: string | number | null) => {
+  const text = value === null ? "" : String(value);
   return /[",\n;]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 };
 
-/** Product costs as a CSV that opens in Excel: fill "Own cost (PKR)", save as CSV, upload on the Costs page. */
+/** Product costs as a CSV that opens in Excel: fill the "Own" columns, save as CSV, upload on the Costs page. */
 export async function GET() {
   const rows = await productCostSheet();
   const lines = [
-    ["SKU", "Brand", "Product", "Own cost (PKR)", "Cost used now (PKR)", "Based on"],
-    ...rows.map((r) => [r.sku, r.brand, r.title, r.basis === "own cost" ? r.cost : "", Math.round(r.cost), r.basis]),
+    ["SKU", "Brand", "Product", "Weight (kg)", "Own cost (PKR)", "Cost used now (PKR)", "Cost based on", "Own shipping (PKR)"],
+    ...rows.map((r) => [
+      r.sku,
+      r.brand,
+      r.title,
+      r.weightKg ? Math.round(r.weightKg * 1000) / 1000 : "",
+      r.ownCost,
+      Math.round(r.costUsed),
+      r.basis,
+      r.ownShipping,
+    ]),
   ].map((row) => row.map(cell).join(","));
   const day = new Date().toISOString().slice(0, 10);
   return new Response("﻿" + lines.join("\r\n") + "\r\n", {

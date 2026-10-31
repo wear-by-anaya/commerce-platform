@@ -4,6 +4,8 @@ import { useActionState, useState } from "react";
 import { createInvoiceAction, type FormState } from "@/app/invoices/actions";
 import { formatTotal } from "@/lib/invoice";
 import buttons from "./ui/Button.module.css";
+import form from "./ui/Form.module.css";
+import { Select } from "./ui/Select";
 import styles from "./InvoiceForm.module.css";
 
 type Line = { service: string; description: string; quantity: string; rate: string };
@@ -26,57 +28,51 @@ export function InvoiceForm({ currencies, today }: { currencies: readonly string
   const total = subtotal - discountValue + (Number(shipping) || 0);
 
   return (
-    <form action={action} className={styles.form}>
-      <section className={styles.panel}>
-        <h2 className={styles.heading}>Details</h2>
-        <div className={styles.grid3}>
-          <label className={styles.field}>
-            <span>Type</span>
-            <select name="kind" defaultValue="Invoice">
-              <option>Invoice</option>
-              <option>Estimate</option>
-            </select>
+    <form action={action} className={form.stack}>
+      <section className={form.panel}>
+        <h2 className={form.title}>Details</h2>
+        <div className={`${form.grid} ${form.grid3}`}>
+          <Select name="kind" label="Type" options={["Invoice", "Estimate"]} defaultValue="Invoice" />
+          <label className={form.field}>
+            <span className={form.label}>Date</span>
+            <input className={form.control} type="date" name="date" defaultValue={today} required />
           </label>
-          <label className={styles.field}>
-            <span>Date</span>
-            <input type="date" name="date" defaultValue={today} required />
-          </label>
-          <label className={styles.field}>
-            <span>Currency</span>
-            <select name="currency" value={currency} onChange={(e) => setCurrency(e.target.value)}>
-              {currencies.map((c) => (
-                <option key={c}>{c}</option>
-              ))}
-            </select>
-          </label>
+          <Select name="currency" label="Currency" options={currencies} value={currency} onChange={setCurrency} />
         </div>
       </section>
 
-      <section className={styles.panel}>
-        <h2 className={styles.heading}>Customer</h2>
-        <div className={styles.grid2}>
-          <label className={styles.field}>
-            <span>Bill to</span>
-            <textarea name="billTo" rows={4} required placeholder={"Name\nAddress line\nCity, Country"} />
-            <small>One line per row: name, address, city, phone.</small>
+      <section className={form.panel}>
+        <h2 className={form.title}>Customer</h2>
+        <div className={form.grid}>
+          <label className={form.field}>
+            <span className={form.label}>Bill to</span>
+            <textarea className={form.control} name="billTo" rows={4} required placeholder={"Name\nAddress line\nCity, Country"} />
+            <span className={form.hint}>One line per row: name, address, city, phone.</span>
           </label>
-          <div className={styles.field}>
-            <label className={styles.check}>
-              <input type="checkbox" name="sameAddress" checked={sameAddress} onChange={(e) => setSameAddress(e.target.checked)} />
-              <span>Ship to the same address</span>
-            </label>
-            {sameAddress ? null : (
-              <label className={styles.field}>
-                <span>Ship to</span>
-                <textarea name="shipTo" rows={4} />
+          {sameAddress ? (
+            <div className={styles.same}>
+              <label className={form.check}>
+                <input type="checkbox" name="sameAddress" checked={sameAddress} onChange={(e) => setSameAddress(e.target.checked)} />
+                <span>Ship to the same address</span>
               </label>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className={form.field}>
+              <label className={form.field}>
+                <span className={form.label}>Ship to</span>
+                <textarea className={form.control} name="shipTo" rows={4} />
+              </label>
+              <label className={form.check}>
+                <input type="checkbox" name="sameAddress" checked={sameAddress} onChange={(e) => setSameAddress(e.target.checked)} />
+                <span>Ship to the same address</span>
+              </label>
+            </div>
+          )}
         </div>
       </section>
 
-      <section className={styles.panel}>
-        <h2 className={styles.heading}>Items</h2>
+      <section className={form.panel}>
+        <h2 className={form.title}>Items</h2>
         <div className={styles.lineHead} aria-hidden="true">
           <span>Item or service</span>
           <span>Description</span>
@@ -88,26 +84,26 @@ export function InvoiceForm({ currencies, today }: { currencies: readonly string
         <ol className={styles.lines}>
           {lines.map((line, index) => (
             <li key={index} className={styles.line}>
-              <label className={styles.field}>
-                <span className={styles.mobileLabel}>Item or service</span>
-                <input value={line.service} onChange={(e) => update(index, "service", e.target.value)} maxLength={500} />
+              <label className={form.field}>
+                <span className={`${form.label} ${styles.mobileLabel}`}>Item or service</span>
+                <input className={form.control} value={line.service} onChange={(e) => update(index, "service", e.target.value)} maxLength={500} />
               </label>
-              <label className={styles.field}>
-                <span className={styles.mobileLabel}>Description</span>
-                <input value={line.description} onChange={(e) => update(index, "description", e.target.value)} maxLength={500} />
+              <label className={form.field}>
+                <span className={`${form.label} ${styles.mobileLabel}`}>Description</span>
+                <input className={form.control} value={line.description} onChange={(e) => update(index, "description", e.target.value)} maxLength={500} />
               </label>
-              <label className={styles.field}>
-                <span className={styles.mobileLabel}>Qty</span>
-                <input type="number" inputMode="decimal" min="0" step="any" value={line.quantity} onChange={(e) => update(index, "quantity", e.target.value)} />
+              <label className={form.field}>
+                <span className={`${form.label} ${styles.mobileLabel}`}>Qty</span>
+                <input className={form.control} type="number" inputMode="decimal" min="0" step="any" value={line.quantity} onChange={(e) => update(index, "quantity", e.target.value)} />
               </label>
-              <label className={styles.field}>
-                <span className={styles.mobileLabel}>Rate</span>
-                <input type="number" inputMode="decimal" min="0" step="any" value={line.rate} onChange={(e) => update(index, "rate", e.target.value)} />
+              <label className={form.field}>
+                <span className={`${form.label} ${styles.mobileLabel}`}>Rate</span>
+                <input className={form.control} type="number" inputMode="decimal" min="0" step="any" value={line.rate} onChange={(e) => update(index, "rate", e.target.value)} />
               </label>
               <p className={styles.amount}>{formatTotal(amount(line), currency)}</p>
               <button
                 type="button"
-                className={styles.remove}
+                className={`${form.iconButton} ${styles.remove}`}
                 onClick={() => setLines((all) => (all.length > 1 ? all.filter((_, i) => i !== index) : [emptyLine()]))}
                 aria-label={`Remove line ${index + 1}`}
               >
@@ -116,23 +112,31 @@ export function InvoiceForm({ currencies, today }: { currencies: readonly string
             </li>
           ))}
         </ol>
-        <button type="button" className={`${buttons.secondary} ${styles.addLine}`} onClick={() => setLines((all) => [...all, emptyLine()])}>
-          Add line
-        </button>
+        <div>
+          <button type="button" className={buttons.secondary} onClick={() => setLines((all) => [...all, emptyLine()])}>
+            Add line
+          </button>
+        </div>
         <input type="hidden" name="lines" value={JSON.stringify(lines)} />
       </section>
 
-      <section className={styles.panel}>
-        <h2 className={styles.heading}>Totals</h2>
-        <div className={styles.grid2}>
-          <div className={styles.grid2}>
-            <label className={styles.field}>
-              <span>Discount %</span>
-              <input type="number" inputMode="decimal" name="discountPercent" min="0" max="100" step="any" value={discount} onChange={(e) => setDiscount(e.target.value)} />
-            </label>
-            <label className={styles.field}>
-              <span>Shipping</span>
-              <input type="number" inputMode="decimal" name="shipping" min="0" step="any" value={shipping} onChange={(e) => setShipping(e.target.value)} />
+      <section className={form.panel}>
+        <h2 className={form.title}>Totals</h2>
+        <div className={styles.totalsGrid}>
+          <div className={form.stack}>
+            <div className={form.grid}>
+              <label className={form.field}>
+                <span className={form.label}>Discount %</span>
+                <input className={form.control} type="number" inputMode="decimal" name="discountPercent" min="0" max="100" step="any" value={discount} onChange={(e) => setDiscount(e.target.value)} />
+              </label>
+              <label className={form.field}>
+                <span className={form.label}>Shipping</span>
+                <input className={form.control} type="number" inputMode="decimal" name="shipping" min="0" step="any" value={shipping} onChange={(e) => setShipping(e.target.value)} />
+              </label>
+            </div>
+            <label className={form.field}>
+              <span className={form.label}>Note on the invoice (optional)</span>
+              <textarea className={form.control} name="notes" rows={2} maxLength={500} placeholder="e.g. Payment by bank transfer within 7 days" />
             </label>
           </div>
           <dl className={styles.totals}>
@@ -146,18 +150,14 @@ export function InvoiceForm({ currencies, today }: { currencies: readonly string
             <dd className={styles.grand}>{formatTotal(total, currency)}</dd>
           </dl>
         </div>
-        <label className={styles.field}>
-          <span>Note on the invoice (optional)</span>
-          <textarea name="notes" rows={2} maxLength={500} placeholder="e.g. Payment by bank transfer within 7 days" />
-        </label>
       </section>
 
       {state.error ? (
-        <p className={styles.error} role="alert">
+        <p className={form.error} role="alert">
           {state.error}
         </p>
       ) : null}
-      <div className={styles.actions}>
+      <div className={form.actions}>
         <button type="submit" className={buttons.button} disabled={pending}>
           {pending ? "Saving…" : "Save and open"}
         </button>

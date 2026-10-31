@@ -1,74 +1,8 @@
-.form {
-  display: grid;
-  gap: 16px;
-  max-width: 960px;
-}
+/* Invoice-specific layout only; fields, panels and buttons come from ui/Form.module.css and ui/Button.module.css. */
 
-.panel {
-  display: grid;
-  gap: 16px;
-  padding: 24px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-}
-
-.heading {
-  margin: 0;
-  font-size: 1.05rem;
-}
-
-.grid2,
-.grid3 {
-  display: grid;
-  gap: 16px;
-}
-
-.field {
-  display: grid;
-  gap: 4px;
-  align-content: start;
-  font-size: var(--text-small);
-  font-weight: 600;
-}
-
-.field input,
-.field select,
-.field textarea {
-  width: 100%;
-  min-height: 44px;
-  padding: 8px 12px;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--ink);
-  font: inherit;
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.field textarea {
-  resize: vertical;
-}
-
-.field small {
-  color: var(--muted);
-  font-weight: 400;
-}
-
-.check {
+.same {
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  font-size: var(--text-secondary);
-}
-
-.check input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--accent);
 }
 
 .lineHead {
@@ -87,8 +21,8 @@
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px 12px;
-  padding: 16px 48px 16px 16px;
+  gap: 12px;
+  padding: 16px 56px 16px 16px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
 }
@@ -109,20 +43,15 @@
   position: absolute;
   top: 8px;
   right: 8px;
-  width: 36px;
-  height: 36px;
-  border: 0;
-  border-radius: var(--radius);
-  background: transparent;
-  color: var(--muted);
-  font-size: 1.4rem;
-  line-height: 1;
-  cursor: pointer;
 }
 
-.remove:hover {
-  background: var(--accent-soft);
-  color: var(--danger);
+.right {
+  text-align: right;
+}
+
+.totalsGrid {
+  display: grid;
+  gap: 24px;
 }
 
 .totals {
@@ -130,8 +59,11 @@
   grid-template-columns: 1fr auto;
   align-content: start;
   align-items: baseline;
-  gap: 8px 24px;
+  gap: 10px 24px;
   margin: 0;
+  padding: 16px;
+  background: var(--bg);
+  border-radius: var(--radius);
 }
 
 .totals dt,
@@ -145,47 +77,19 @@
 }
 
 .grand {
-  padding-top: 8px;
+  padding-top: 10px;
   border-top: 1px solid var(--ink);
+  font-size: 1.05rem;
   font-weight: 700;
 }
 
-.error {
-  margin: 0;
-  padding: 12px 16px;
-  border: 1px solid var(--danger);
-  border-radius: var(--radius);
-  color: var(--danger);
-}
-
-.actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.addLine {
-  justify-self: start;
-}
-
-.right {
-  text-align: right;
-}
-
 @media (min-width: 720px) {
-  .grid2 {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .grid3 {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
   .lineHead,
   .line {
     display: grid;
-    grid-template-columns: 2fr 2fr 72px 120px 120px 36px;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 2fr) 80px 128px 128px 44px;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
   }
 
   .lineHead {
@@ -216,5 +120,10 @@
 
   .remove {
     position: static;
+  }
+
+  .totalsGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+    align-items: start;
   }
 }

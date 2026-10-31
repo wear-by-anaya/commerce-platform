@@ -1,4 +1,5 @@
 import { cacheLife } from "next/cache";
+import { db, isDatabaseConnected } from "@/lib/db";
 import { requireUser } from "@/lib/session";
 import { API_VERSION, shopifyQuery } from "@/lib/shopify/client";
 
@@ -86,4 +87,18 @@ export async function apiVersionStatus() {
   const ours = versions.find((v) => v.handle === API_VERSION);
   const newest = versions.filter((v) => v.supported && /^\d{4}-\d{2}$/.test(v.handle)).map((v) => v.handle).sort().pop();
   return { ours: API_VERSION, supported: ours?.supported ?? null, newest: newest ?? null };
+}
+
+/** Stable key for an update: its link, or source + title when a feed gives no link. */
+export const updateKey = (item: Pick<UpdateItem, "source" | "title" | "link">) => item.link || `${item.source}: ${item.title}`;
+
+export type UpdateReview = { by: string; at: string; note: string };
+
+/** Who reviewed which update, and what was changed. Empty when the database is not connected. */
+export async function updateReviews(): Promise<Map<string, UpdateReview>> {
+  await requireUser();
+  if (!isDatabaseConnected()) return new Map();
+  const sql = await db();
+  const rows = await sql`SELECT item_key, reviewed_by, reviewed_at::text AS reviewed_at, note FROM update_reviews`;
+  return new Map(rows.map((r) => [String(r.item_key), { by: String(r.reviewed_by), at: String(r.reviewed_at), note: String(r.note) }]));
 }
