@@ -28,7 +28,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     };
   }, [open]);
 
-  if (pathname === "/login" || pathname === "/invoices/sample") return <>{children}</>;
+  if (pathname === "/login" || pathname.startsWith("/invoices/")) return <>{children}</>;
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);

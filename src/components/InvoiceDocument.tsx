@@ -24,7 +24,7 @@ function Address({ title, lines }: { title: string; lines: string[] }) {
 }
 
 export function InvoiceDocument({ invoice }: { invoice: InvoiceData }) {
-  const { subtotal, discount, total } = invoiceTotals(invoice);
+  const { subtotal, discount, shipping, total } = invoiceTotals(invoice);
   return (
     <article className={styles.page}>
       <header className={styles.seller}>
@@ -74,8 +74,8 @@ export function InvoiceDocument({ invoice }: { invoice: InvoiceData }) {
             </tr>
           </thead>
           <tbody>
-            {invoice.lines.map((line) => (
-              <tr key={line.service + line.description}>
+            {invoice.lines.map((line, i) => (
+              <tr key={i}>
                 <td>{line.date}</td>
                 <td>{line.service}</td>
                 <td>{line.description}</td>
@@ -91,10 +91,16 @@ export function InvoiceDocument({ invoice }: { invoice: InvoiceData }) {
       <dl className={styles.totals}>
         <dt>SUBTOTAL</dt>
         <dd>{formatAmount(subtotal)}</dd>
-        {invoice.discountPercent > 0 ? (
+        {discount > 0 ? (
           <>
-            <dt>DISCOUNT {invoice.discountPercent}%</dt>
+            <dt>DISCOUNT{invoice.discountAmount === undefined ? ` ${invoice.discountPercent}%` : ""}</dt>
             <dd>-{formatAmount(discount)}</dd>
+          </>
+        ) : null}
+        {shipping > 0 ? (
+          <>
+            <dt>SHIPPING</dt>
+            <dd>{formatAmount(shipping)}</dd>
           </>
         ) : null}
         <dt className={styles.grand}>TOTAL</dt>

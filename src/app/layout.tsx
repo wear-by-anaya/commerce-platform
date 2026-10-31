@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { AppShell } from "@/components/AppShell";
 import { ToastProvider } from "@/components/ui/Toast";
@@ -60,7 +61,9 @@ export default function RootLayout({
     <html lang="en" className={sans.variable}>
       <body>
         <ToastProvider>
-          <AppShell>{children}</AppShell>
+          <Suspense fallback={null}>
+            <AppShell>{children}</AppShell>
+          </Suspense>
         </ToastProvider>
       </body>
     </html>

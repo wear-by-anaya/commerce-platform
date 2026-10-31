@@ -29,7 +29,10 @@ export type InvoiceData = {
   shipTo: string[];
   lines: InvoiceLine[];
   discountPercent: number;
-  currency: "PKR" | "GBP";
+  /** Fixed discount from the order; used instead of discountPercent when set. */
+  discountAmount?: number;
+  shipping?: number;
+  currency: string;
 };
 
 export function lineAmount(line: InvoiceLine) {
@@ -38,8 +41,9 @@ export function lineAmount(line: InvoiceLine) {
 
 export function invoiceTotals(invoice: InvoiceData) {
   const subtotal = invoice.lines.reduce((sum, line) => sum + lineAmount(line), 0);
-  const discount = (subtotal * invoice.discountPercent) / 100;
-  return { subtotal, discount, total: subtotal - discount };
+  const discount = invoice.discountAmount ?? (subtotal * invoice.discountPercent) / 100;
+  const shipping = invoice.shipping ?? 0;
+  return { subtotal, discount, shipping, total: subtotal - discount + shipping };
 }
 
 export function formatAmount(value: number) {
@@ -47,5 +51,6 @@ export function formatAmount(value: number) {
 }
 
 export function formatTotal(value: number, currency: InvoiceData["currency"]) {
-  return (currency === "PKR" ? "Rs " : "£") + formatAmount(value);
+  const symbol = currency === "PKR" ? "Rs " : currency === "GBP" ? "£" : currency + " ";
+  return symbol + formatAmount(value);
 }
