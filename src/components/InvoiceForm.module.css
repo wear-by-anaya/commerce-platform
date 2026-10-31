@@ -163,6 +163,10 @@
   justify-content: flex-end;
 }
 
+.addLine {
+  justify-self: start;
+}
+
 .right {
   text-align: right;
 }

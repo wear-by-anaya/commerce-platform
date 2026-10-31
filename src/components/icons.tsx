@@ -8,11 +8,18 @@ type IconName =
   | "sync"
   | "reviews"
   | "settings"
+  | "bell"
   | "menu"
   | "close"
   | "info";
 
 const PATHS: Record<IconName, ReactNode> = {
+  bell: (
+    <>
+      <path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4l2-2z" />
+      <path d="M10 20a2 2 0 0 0 4 0" />
+    </>
+  ),
   dashboard: (
     <>
       <rect x="3" y="3" width="7" height="7" rx="1" />

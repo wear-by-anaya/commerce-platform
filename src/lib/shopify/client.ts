@@ -5,7 +5,7 @@
  */
 import { requireUser } from "@/lib/session";
 
-const API_VERSION = "2026-10";
+export const API_VERSION = "2026-10";
 
 type Token = { value: string; expires: number };
 let token: Token | null = null;

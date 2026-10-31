@@ -1,0 +1,31 @@
+.section {
+  margin: 24px 0 12px;
+  font-size: 1.05rem;
+}
+
+.note,
+.alert {
+  margin: 0 0 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: var(--text-secondary);
+}
+
+.alert {
+  border-color: var(--danger);
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.more {
+  margin-top: 24px;
+}
+
+.more summary {
+  min-height: 44px;
+  padding: 12px 0;
+  font-weight: 600;
+  cursor: pointer;
+}

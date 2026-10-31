@@ -20,3 +20,21 @@
     grid-template-columns: 1fr;
   }
 }
+
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.section {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.sectionHead a {
+  color: var(--accent);
+  font-weight: 600;
+}

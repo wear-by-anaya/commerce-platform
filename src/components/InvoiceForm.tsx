@@ -116,7 +116,7 @@ export function InvoiceForm({ currencies, today }: { currencies: readonly string
             </li>
           ))}
         </ol>
-        <button type="button" className={buttons.secondary} onClick={() => setLines((all) => [...all, emptyLine()])}>
+        <button type="button" className={`${buttons.secondary} ${styles.addLine}`} onClick={() => setLines((all) => [...all, emptyLine()])}>
           Add line
         </button>
         <input type="hidden" name="lines" value={JSON.stringify(lines)} />

@@ -1,7 +1,7 @@
 export type NavItem = {
   href: string;
   label: string;
-  icon: "dashboard" | "orders" | "inventory" | "designers" | "sync" | "reviews" | "settings";
+  icon: "dashboard" | "orders" | "inventory" | "designers" | "sync" | "reviews" | "settings" | "bell";
   badgeCount?: number;
   badgeTone?: "neutral" | "accent" | "warning";
   /** Page not built yet; shown with a "planned" badge. */
@@ -16,7 +16,10 @@ export type NavGroup = {
 export const NAV_GROUPS: NavGroup[] = [
   {
     label: "Overview",
-    items: [{ href: "/", label: "Dashboard", icon: "dashboard" }],
+    items: [
+      { href: "/", label: "Dashboard", icon: "dashboard" },
+      { href: "/updates", label: "Updates", icon: "bell" },
+    ],
   },
   {
     label: "Commerce",
