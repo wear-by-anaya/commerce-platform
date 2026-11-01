@@ -38,8 +38,8 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: "Operations",
     items: [
-      { href: "/sync-runs", label: "Sync runs", icon: "sync", planned: true },
-      { href: "/reviews", label: "Reviews", icon: "reviews", planned: true },
+      { href: "/sync-runs", label: "Sync runs", icon: "sync" },
+      { href: "/reviews", label: "Reviews", icon: "reviews" },
     ],
   },
   {

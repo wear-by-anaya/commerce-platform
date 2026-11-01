@@ -6,7 +6,9 @@ import { MetricCard } from "@/components/MetricCard";
 import { RecentOrders } from "@/components/OrdersTable";
 import { PageHeader } from "@/components/PageHeader";
 import { UpdatesList } from "@/components/UpdatesList";
+import { Badge } from "@/components/ui/Badge";
 import buttons from "@/components/ui/Button.module.css";
+import { reviewAlerts } from "@/lib/alerts";
 import { formatTotal } from "@/lib/invoice";
 import { isShopifyConnected } from "@/lib/shopify/client";
 import { orderStats } from "@/lib/shopify/orders";
@@ -50,6 +52,29 @@ async function LatestUpdates() {
   );
 }
 
+async function OpenReviews() {
+  await connection();
+  const { open } = await reviewAlerts();
+  const list = open.filter((a) => a.group !== "updates");
+  if (!list.length) return null;
+  return (
+    <section>
+      <div className={styles.sectionHead}>
+        <h2 className={styles.section}>Reviews · {list.length} open</h2>
+        <Link href="/reviews">See all</Link>
+      </div>
+      <ul className={styles.reviews}>
+        {list.slice(0, 3).map((a) => (
+          <li key={a.key}>
+            <Badge tone={a.tone}>{a.tone === "warning" ? "Problem" : a.tone === "accent" ? "New" : "To do"}</Badge>
+            <span>{a.title}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 export default function HomePage() {
   return (
     <div className={styles.page}>
@@ -63,6 +88,9 @@ export default function HomePage() {
       </Suspense>
       <Suspense fallback={<SkeletonTable rows={5} cols={7} />}>
         <RecentOrders first={5} />
+      </Suspense>
+      <Suspense fallback={<SkeletonList rows={3} />}>
+        <OpenReviews />
       </Suspense>
       <Suspense fallback={<SkeletonList rows={3} />}>
         <LatestUpdates />

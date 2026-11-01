@@ -38,3 +38,28 @@
   color: var(--accent);
   font-weight: 600;
 }
+
+.reviews {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.reviews li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  border-top: 1px solid var(--line);
+  font-weight: 600;
+}
+
+.reviews li:first-child {
+  border-top: 0;
+}

@@ -110,6 +110,27 @@ async function migrate(sql: Sql) {
     reviewed_at timestamptz NOT NULL DEFAULT now(),
     note text NOT NULL DEFAULT ''
   )`;
+  // Sync runs: one line per job (imports, Unstitched batches, brand checks, New Arrivals rebuilds) with counts + errors.
+  await sql`CREATE TABLE IF NOT EXISTS sync_runs (
+    id serial PRIMARY KEY,
+    kind text NOT NULL,
+    name text NOT NULL,
+    status text NOT NULL,
+    items integer NOT NULL DEFAULT 0,
+    errors integer NOT NULL DEFAULT 0,
+    detail text NOT NULL DEFAULT '',
+    source text NOT NULL DEFAULT 'manual',
+    logged_by text NOT NULL DEFAULT '',
+    started_at timestamptz,
+    finished_at timestamptz NOT NULL DEFAULT now()
+  )`;
+  await sql`CREATE INDEX IF NOT EXISTS sync_runs_finished ON sync_runs (finished_at DESC)`;
+  // Reviews: alerts someone marked as done (the key holds what the alert was about, so a new event alerts again).
+  await sql`CREATE TABLE IF NOT EXISTS alert_reviews (
+    alert_key text PRIMARY KEY,
+    done_by text NOT NULL,
+    done_at timestamptz NOT NULL DEFAULT now()
+  )`;
   return sql;
 }
 

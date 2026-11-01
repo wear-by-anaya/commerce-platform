@@ -1,0 +1,142 @@
+.counts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 720px) {
+  .counts {
+    grid-template-columns: 1fr;
+  }
+}
+
+.count {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.count:hover {
+  border-color: var(--accent);
+}
+
+.countLabel {
+  color: var(--muted);
+  font-size: var(--text-small);
+  font-weight: 600;
+}
+
+.countValue {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.group {
+  display: grid;
+  gap: 12px;
+  scroll-margin-top: 80px;
+}
+
+.section {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border-top: 1px solid var(--line);
+}
+
+.item:first-child {
+  border-top: 0;
+}
+
+@media (max-width: 560px) {
+  .item {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 12px;
+  }
+
+  .item > button {
+    justify-self: start;
+  }
+}
+
+.body {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.titleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.title {
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.detail {
+  margin: 0;
+  color: var(--ink);
+  font-size: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-small);
+}
+
+.meta a {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.clear {
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+  color: var(--muted);
+  font-size: var(--text-secondary);
+}
+
+.more summary {
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  cursor: pointer;
+}
