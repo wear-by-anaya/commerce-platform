@@ -172,11 +172,18 @@
   }
 }
 
+/* Zero page margins stop the browser printing its own date, title, web address and page numbers;
+   the invoice keeps its white space through its own padding. */
+@page {
+  size: A4;
+  margin: 0;
+}
+
 @media print {
   .page {
     max-width: none;
     min-height: 0;
-    padding: 0;
+    padding: 15mm;
   }
 
   .tableWrap {

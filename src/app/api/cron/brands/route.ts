@@ -1,4 +1,5 @@
-import { oldestBrands, scanBrand } from "@/lib/designers";
+import { revalidateTag } from "next/cache";
+import { DESIGNERS_TAG, oldestBrands, scanBrand } from "@/lib/designers";
 
 // Daily job (vercel.json): checks the 12 brands checked longest ago, so all brands rotate within a week.
 // Vercel sends "Authorization: Bearer <CRON_SECRET>"; without CRON_SECRET set in Vercel the job does nothing.
@@ -16,5 +17,6 @@ export async function GET(request: Request) {
     const r = await scanBrand(brand);
     done.push(`${brand.slug}: ${r.ok ? `${r.products} products, ${r.inStock} in stock` : r.error}`);
   }
+  revalidateTag(DESIGNERS_TAG, "max");
   return Response.json({ checked: done.length, done });
 }

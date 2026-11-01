@@ -1,10 +1,13 @@
+import { cacheLife, cacheTag } from "next/cache";
 import { BRANDS, vendorsOf, type Brand } from "@/lib/brands";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/session";
-import { shopifyQuery } from "@/lib/shopify/client";
+import { shopifyAdmin } from "@/lib/shopify/client";
 
 /** A brand needs a new check of its website after this many days (weekly rule, 29 Oct). */
 export const RECHECK_DAYS = 7;
+/** Cache tag for the brand table; actions call updateTag(DESIGNERS_TAG) after a change. */
+export const DESIGNERS_TAG = "designers";
 
 type BrandProduct = { published_at?: string; created_at?: string; variants: { available: boolean }[] };
 
@@ -79,7 +82,7 @@ async function storeCounts(vendors: string[]) {
     const fields = chunk
       .map((v, j) => `v${j}: productsCount(query: ${JSON.stringify(`vendor:"${v.replace(/"/g, "")}" AND status:active`)}, limit: null) { count }`)
       .join("\n");
-    const { data } = await shopifyQuery<Record<string, { count: number }>>(`{ ${fields} }`);
+    const { data } = await shopifyAdmin<Record<string, { count: number }>>(`{ ${fields} }`);
     chunk.forEach((v, j) => counts.set(v, data?.[`v${j}`]?.count ?? 0));
   }
   return counts;
@@ -100,15 +103,29 @@ export type DesignerRow = {
   error: string;
 };
 
-export async function designers(): Promise<{ rows: DesignerRow[]; storeTotal: number; storeBrands: number }> {
+type DesignersData = { rows: DesignerRow[]; storeTotal: number; storeBrands: number };
+
+/** Signed-in view of the brand table (cached; see designersData). */
+export async function designers(): Promise<DesignersData> {
   await requireUser();
+  return designersData();
+}
+
+/**
+ * Brand table: our counts from Shopify + the last website checks. About 6 Shopify queries, so it is cached for a few
+ * minutes (searching and paging then only filter it) and refreshed at once by updateTag("designers") after a change.
+ */
+async function designersData(): Promise<DesignersData> {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag(DESIGNERS_TAG);
   const sql = await db();
   const [scans, partners, vendorList, total] = await Promise.all([
     sql`SELECT slug, products, in_stock, newest_at::text AS newest_at, checked_at::text AS checked_at, error,
         EXTRACT(EPOCH FROM (now() - checked_at)) / 86400 AS days FROM brand_scans`,
     sql`SELECT slug FROM brand_partners`,
-    shopifyQuery<{ productVendors: { nodes: string[] } }>(`{ productVendors(first: 250) { nodes } }`),
-    shopifyQuery<{ productsCount: { count: number } }>(`{ productsCount(query: "status:active", limit: null) { count } }`),
+    shopifyAdmin<{ productVendors: { nodes: string[] } }>(`{ productVendors(first: 250) { nodes } }`),
+    shopifyAdmin<{ productsCount: { count: number } }>(`{ productsCount(query: "status:active", limit: null) { count } }`),
   ]);
   const scan = new Map(scans.map((r) => [String(r.slug), r]));
   const partner = new Set(partners.map((r) => String(r.slug)));

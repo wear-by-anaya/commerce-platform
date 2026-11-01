@@ -36,9 +36,17 @@ async function accessToken() {
 
 export type ShopifyResult<T> = { data: T | null; errors: string[] };
 
-/** Runs a read query. Returns partial data with error messages (e.g. a field the app may not read). */
+/** Runs a read query for a signed-in person. Returns partial data with error messages (e.g. a field the app may not read). */
 export async function shopifyQuery<T>(query: string, variables: Record<string, unknown> = {}): Promise<ShopifyResult<T>> {
   await requireUser();
+  return shopifyAdmin<T>(query, variables);
+}
+
+/**
+ * The same query without the sign-in check, for cached code ("use cache" cannot read the session) and the daily job.
+ * Callers must check the person first (requireUser) or be the cron route.
+ */
+export async function shopifyAdmin<T>(query: string, variables: Record<string, unknown> = {}): Promise<ShopifyResult<T>> {
   let tokenValue: string;
   try {
     tokenValue = await accessToken();

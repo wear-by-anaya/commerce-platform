@@ -8,6 +8,7 @@ import {
   lineAmount,
   type InvoiceData,
 } from "@/lib/invoice";
+import { DocumentTitle } from "./DocumentTitle";
 import styles from "./InvoiceDocument.module.css";
 
 function Address({ title, lines }: { title: string; lines: string[] }) {
@@ -27,6 +28,7 @@ export function InvoiceDocument({ invoice }: { invoice: InvoiceData }) {
   const { subtotal, discount, shipping, total } = invoiceTotals(invoice);
   return (
     <article className={styles.page}>
+      <DocumentTitle title={`${invoice.kind} ${invoice.number} ${invoice.billTo[0] ?? ""}`} />
       <header className={styles.seller}>
         <div>
         <h1 className={styles.brand}>{SELLER.name}</h1>
