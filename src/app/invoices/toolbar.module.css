@@ -10,3 +10,9 @@
 .spacer {
   flex: 1;
 }
+
+@media print {
+  .toolbar {
+    display: none;
+  }
+}

@@ -75,8 +75,9 @@ h3 {
 }
 
 @media print {
+  /* !important: component styles (e.g. a toolbar with display: flex) load later and would win otherwise. */
   [data-print-hide] {
-    display: none;
+    display: none !important;
   }
 
   html,
